@@ -32,6 +32,9 @@ Insert the output from node token cat command above on the command below for K3S
 
 
 
+To scale a deployment:
+* ```kubectl scale deployment/<deployment_name> --replicas=10```
+
 
 
 Install Longhorn: 
