@@ -11,5 +11,5 @@ spec:
   type: LoadBalancer
   ports:
     - port: 8001
-      targetPort: 80
+      targetPort: 8000
 ---
