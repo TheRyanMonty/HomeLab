@@ -32,6 +32,9 @@ Install Longhorn:
 * ```kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.2.2/deploy/longhorn.yaml```
 
 Install Wordpress:
+* Deploy secrets file and run, ex:
+* ```kubectl apply -f wordpress-secrets.yaml```
+* Deploy the non-secret info:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/wordpress-prod.yaml```
 
 
