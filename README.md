@@ -5,6 +5,8 @@
   - How to deploy NFS for kubernetes (and use for backups?)
   - How to use traefik in k3s?
   - Implement Ansible for server build steps
+  - How to maintain k3s from another node/user?
+  - How to setup mysql with new user and schema for wordpress?
 
 ## All servers:
 Set timezone: 
