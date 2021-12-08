@@ -54,11 +54,11 @@ To scale a deployment:
 To set context to a namespace:
 * ```kubectl config set-context --current --namespace=<namespace>```
 
-To store a secret, it must be in base64 via yaml file:
+To store a secret, it must be encoded base64 via yaml file:
 * ```echo '<user or password in plain text>' | base64```
 
 To decode a secret, you must also use base64:
-* ```echo '<encrypted user or password>' | base64 --decode```
+* ```echo '<encoded user or password>' | base64 --decode```
 
 How to tell which pod is on which node: 
 * ```kubectl get pod -o=custom-columns=NAME:.metadata.name,STATUS:.status.phase,NODE:.spec.nodeName --all-namespaces```
