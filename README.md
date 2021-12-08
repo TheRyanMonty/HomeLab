@@ -34,6 +34,8 @@ Install Longhorn for distributed clustered storage management:
 Install Wordpress:
 * Deploy secrets file and run, ex:
 * ```kubectl apply -f wordpress-secrets.yaml```
+* Set context for the wordpress namespace:
+* ```kubectl config set-context --current --namespace=wordpress```
 * Deploy the non-secret info:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/wordpress-prod.yaml```
 
