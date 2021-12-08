@@ -28,6 +28,15 @@ Install K3S:
 Get node token for use on agents:
 * ```cat /var/lib/rancher/k3s/server/node-token```
 
+Install Kubernetes Dashboard:
+* ```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml```
+
+Run the assist pieces to make it accessible on port 8000:
+* ```kubectl apply -f ```
+
+Get the token for kubernetes dashboard:
+* ```kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"```
+
 Install Longhorn for distributed clustered storage management:
 * ```kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.2.2/deploy/longhorn.yaml```
 
@@ -65,8 +74,7 @@ To decode a secret, you must also use base64:
 How to tell which pod is on which node: 
 * ```kubectl get pod -o=custom-columns=NAME:.metadata.name,STATUS:.status.phase,NODE:.spec.nodeName --all-namespaces```
 
-Get the token for kubernetes dashboard:
-* ```kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"```
+
 
 ## Homelab1: Load balancer
 Install nginx:
