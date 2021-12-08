@@ -46,7 +46,7 @@ Insert the output from node token cat command above on the command below for K3S
 
 
 
-##K3S Cheat Cheat:
+## K3S Cheat Cheat:
 To execute a command on a pod:
 * ```kubectl exec --stdin --tty <pod_name> -- /bin/bash```
 
