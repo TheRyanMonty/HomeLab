@@ -31,6 +31,8 @@ Insert the output from node token cat command above on the command below for K3S
 * ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.86.35:6443 K3S_TOKEN=<insert_from_above> sh -```
 
 
+To execute a command on a pod:
+* ```kubectl exec --stdin --tty <pod_name> -- /bin/bash```
 
 To scale a deployment:
 * ```kubectl scale deployment/<deployment_name> --replicas=10```
