@@ -31,6 +31,10 @@ Get node token for use on agents:
 Install Longhorn:
 * ```kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.2.2/deploy/longhorn.yaml```
 
+Install Wordpress:
+* ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/wordpress-prod.yaml```
+
+
 ## pm-k3s2:
 Insert the output from node token cat command above on the command below for K3S_TOKEN variable and run on pm-k3s2:
 * ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.86.35:6443 K3S_TOKEN=<insert_from_above> sh -```
