@@ -28,17 +28,24 @@ Install K3S:
 Get node token for use on agents:
 * ```cat /var/lib/rancher/k3s/server/node-token```
 
+Install Longhorn:
+* ```kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.2.2/deploy/longhorn.yaml```
+
 ## pm-k3s2:
 Insert the output from node token cat command above on the command below for K3S_TOKEN variable and run on pm-k3s2:
 * ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.86.35:6443 K3S_TOKEN=<insert_from_above> sh -```
 
 
+
+K3S Cheat Cheat:
 To execute a command on a pod:
 * ```kubectl exec --stdin --tty <pod_name> -- /bin/bash```
 
 To scale a deployment:
 * ```kubectl scale deployment/<deployment_name> --replicas=10```
 
+To set context to a namespace:
+* ```kubectl config set-context --current --namespace=<namespace>```
 
 
 Install Longhorn: 
