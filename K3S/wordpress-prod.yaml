@@ -76,7 +76,7 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: root-wp-mysql-pass
+              name: root-mysql-pass
               key: password
         - name: MYSQL_USER
           value: "wordpress"
