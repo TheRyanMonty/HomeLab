@@ -1,5 +1,10 @@
 # HomeLab Setup
 
+Port listing:
+8000 = Kubernetes Dashboard
+8001 = Longhorn Storage Management Dashboard
+8002 = Wordpress / Main Blog Site
+
 ## Open Questions
   - How to do backups? (kubernetes cron job?)
   - How to deploy NFS for kubernetes (and use for backups?)
@@ -39,6 +44,9 @@ Get the token for kubernetes dashboard:
 
 Install Longhorn for distributed clustered storage management:
 * ```kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.2.2/deploy/longhorn.yaml```
+
+Expose longhorn ui on port 8001:
+* ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/longhorn-expose-frontend.yaml```
 
 Install Wordpress:
 * Deploy secrets file and run, ex:
