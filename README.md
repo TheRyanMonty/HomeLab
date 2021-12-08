@@ -6,7 +6,7 @@
   - How to use traefik in k3s?
   - Implement Ansible for server build steps
   - How to maintain k3s from another node/user?
-  - How to setup mysql with new user and schema for wordpress?
+  - How to use the longhorn storage?
 
 ## All servers:
 Set timezone: 
@@ -32,7 +32,7 @@ Install Kubernetes Dashboard:
 * ```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml```
 
 Run the assist pieces to make it accessible on port 8000:
-* ```kubectl apply -f ```
+* ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/kubernetes-dashboard-assist.yaml```
 
 Get the token for kubernetes dashboard:
 * ```kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"```
