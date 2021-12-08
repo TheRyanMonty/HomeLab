@@ -28,7 +28,7 @@ Install K3S:
 Get node token for use on agents:
 * ```cat /var/lib/rancher/k3s/server/node-token```
 
-Install Longhorn:
+Install Longhorn for distributed clustered storage management:
 * ```kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.2.2/deploy/longhorn.yaml```
 
 Install Wordpress:
