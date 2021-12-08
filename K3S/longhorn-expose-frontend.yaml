@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: longhorn-frontend-expose
+  name: longhorn-ui-expose
   namespace: longhorn-system
   labels:
-    app: longhorn-frontend
+    app: longhorn-ui
 spec:
   selector:
-    app: longhorn-frontend
+    app: longhorn-ui
   type: LoadBalancer
   ports:
     - port: 8001
