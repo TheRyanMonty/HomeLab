@@ -46,7 +46,7 @@ Insert the output from node token cat command above on the command below for K3S
 
 
 
-K3S Cheat Cheat:
+##K3S Cheat Cheat:
 To execute a command on a pod:
 * ```kubectl exec --stdin --tty <pod_name> -- /bin/bash```
 
@@ -65,6 +65,8 @@ To decode a secret, you must also use base64:
 How to tell which pod is on which node: 
 * ```kubectl get pod -o=custom-columns=NAME:.metadata.name,STATUS:.status.phase,NODE:.spec.nodeName --all-namespaces```
 
+Get the token for kubernetes dashboard:
+* ```kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"```
 
 ## Homelab1: Load balancer
 Install nginx:
