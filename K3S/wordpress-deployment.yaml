@@ -9,8 +9,6 @@ spec:
     app: wordpress
     tier: frontend
   type: LoadBalancer
-  #externalTrafficPolicy: Local
-  #loadBalancerIP: 192.168.86.35
   ports:
     - port: 8000
       targetPort: 80
@@ -53,6 +51,10 @@ spec:
         env:
         - name: WORDPRESS_DB_HOST
           value: wordpress-mysql
+        - name: WORDPRESS_DB_NAME
+          value: wordpress
+        - name: WORDPRESS_DB_USER
+          value: root
         - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
