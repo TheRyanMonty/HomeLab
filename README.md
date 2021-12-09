@@ -16,13 +16,13 @@ Port listing/planning:
 
 ## All servers:
 Set timezone: 
-```sudo timedatectl set-timezone America/Chicago```
+* ```sudo timedatectl set-timezone America/Chicago```
 
 Install qemu-guest-agent for VMs: 
-```sudo apt install qemu-guest-agent```
+* ```sudo apt install qemu-guest-agent```
 
 Setup vi as shell browser: 
-```echo "set -o vi" >> ~/.bashrc```
+* ```echo "set -o vi" >> ~/.bashrc; sudo set -o vi" >> ~/.bashrc```
 
 
 ## Kubernetes:
