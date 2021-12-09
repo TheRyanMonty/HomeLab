@@ -49,7 +49,7 @@ Expose longhorn ui on port 8001:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/longhorn-expose-frontend.yaml```
 
 Install Wordpress:
-* Deploy secrets file and run, ex:
+* Deploy secrets file and run (example file: https://github.com/TheRyanMonty/HomeLab/blob/main/K3S/example-wordpress-secrets.yaml), ex:
 * ```kubectl apply -f wordpress-secrets.yaml```
 * Set context for the wordpress namespace:
 * ```kubectl config set-context --current --namespace=wordpress```
