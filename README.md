@@ -16,18 +16,18 @@ Port listing/planning:
 
 ## All servers:
 Set timezone: 
-```sudo timedatectl set-timezone America/Chicago```
+* ```sudo timedatectl set-timezone America/Chicago```
 
 Install qemu-guest-agent for VMs: 
-```sudo apt install qemu-guest-agent```
+* ```sudo apt install qemu-guest-agent```
 
 Setup vi as shell browser: 
-```echo "set -o vi" >> ~/.bashrc```
+* ```echo "set -o vi" >> ~/.bashrc; sudo echo "set -o vi" >> ~/.bashrc```
 
 
 ## Kubernetes:
 
-## pm-k3s1:
+## pm-k3s-s1:
 Install K3S: 
 * ```curl -sfL https://get.k3s.io | sh -```
 
@@ -56,6 +56,14 @@ Set longhorn as default storage provider
 Ensure longhorn is default storage provider
 * ```kubectl get storageclass```
 
+Set taint for server so workloads are scheduled on agents and not on this master server:
+* ```kubectl taint nodes node1 key1=value1:NoSchedule```
+
+## pm-k3s-wl1:
+
+Insert the output from node token cat command above on the command below for K3S_TOKEN variable and run on pm-k3s2:
+* ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.86.35:6443 K3S_TOKEN=<insert_from_above> sh -```
+
 Install Wordpress:
 * Deploy secrets file and run (example file: https://github.com/TheRyanMonty/HomeLab/blob/main/K3S/example-wordpress-secrets.yaml), ex:
 * ```kubectl apply -f wordpress-secrets.yaml```
@@ -63,11 +71,6 @@ Install Wordpress:
 * ```kubectl config set-context --current --namespace=wordpress```
 * Deploy the non-secret info:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/wordpress-prod.yaml```
-
-
-## pm-k3s2:
-Insert the output from node token cat command above on the command below for K3S_TOKEN variable and run on pm-k3s2:
-* ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.86.35:6443 K3S_TOKEN=<insert_from_above> sh -```
 
 
 
