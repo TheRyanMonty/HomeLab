@@ -11,5 +11,7 @@ sudo timedatectl set-timezone America/Chicago
 sudo apt install qemu-guest-agent
 #Setup vi as shell browser:
 echo "set -o vi" >> ~/.bashrc; sudo echo "set -o vi" >> ~/.bashrc
+#update and upgrade
+sudo apt update; sudo apt upgrade
 
 exit 0
