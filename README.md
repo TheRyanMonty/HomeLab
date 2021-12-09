@@ -11,7 +11,6 @@ Port listing/planning:
   - How to deploy NFS for kubernetes (and use for backups?)
   - How to use traefik in k3s?
   - Implement Ansible for server build steps
-  - How to maintain k3s from another node/user?
   - How to use the longhorn storage?
 
 ## All servers:
@@ -56,6 +55,19 @@ Set taint for server so workloads are scheduled on agents and not on this master
 
 Insert the output from node token cat command above on the command below for K3S_TOKEN variable and run on pm-k3s2:
 * ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.86.35:6443 K3S_TOKEN=<insert_from_above> sh -```
+
+Setup the ability to run kubectl from this workload server:
+Obtain the k3s.yaml file
+On server node pm-k3s-s1
+* ```sudo cp /etc/rancher/k3s/k3s.yaml /tmp/config```
+* ```sudo chmod +r /tmp/config```
+On workload servver pm-k3s-wl1
+* ```mkdir -p ~/.kube/```
+* ```sudo scp pm-k3s-s1:/tmp/config ~/.kube/```
+* ```chmod 600 ~/.kube/config```
+* ```ls -al ~/.kube/config```
+Test
+* ```kubectl get pods --all-namespaces```
 
 Install Wordpress:
 * Deploy secrets file and run (example file: https://github.com/TheRyanMonty/HomeLab/blob/main/K3S/example-wordpress-secrets.yaml), ex:
