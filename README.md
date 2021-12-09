@@ -50,7 +50,7 @@ Ensure longhorn is default storage provider
 * ```kubectl get storageclass```
 
 Set taint for server so workloads are scheduled on agents and not on this master server:
-* ```kubectl taint nodes node1 key1=value1:NoSchedule```
+* ```kubectl taint nodes pm-k3s-s1 key1=value1:NoSchedule```
 
 ## pm-k3s-wl1:
 
