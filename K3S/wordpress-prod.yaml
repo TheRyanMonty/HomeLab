@@ -28,7 +28,7 @@ metadata:
     app: wordpress
 spec:
   ports:
-    - port: 3306
+    - port: 8003
       targetPort: 3306
   type: LoadBalancer
   selector:
@@ -79,7 +79,10 @@ spec:
               name: root-mysql-pass
               key: password
         - name: MYSQL_USER
-          value: "wordpress"
+          valueFrom:
+            secretKeyRef:
+              name: wp-mysql-pass
+              key: username
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -111,7 +114,7 @@ spec:
     tier: frontend
   type: LoadBalancer
   ports:
-    - port: 8000
+    - port: 8002
       targetPort: 80
 ---
 apiVersion: v1
