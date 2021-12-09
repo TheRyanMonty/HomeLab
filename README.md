@@ -57,15 +57,17 @@ Insert the output from node token cat command above on the command below for K3S
 * ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.86.35:6443 K3S_TOKEN=<insert_from_above> sh -```
 
 Setup the ability to run kubectl from this workload server:
-Obtain the k3s.yaml file
+
 On server node pm-k3s-s1
 * ```sudo cp /etc/rancher/k3s/k3s.yaml /tmp/config```
 * ```sudo chmod +r /tmp/config```
-On workload servver pm-k3s-wl1
+
+On workload server pm-k3s-wl1
 * ```mkdir -p ~/.kube/```
 * ```sudo scp pm-k3s-s1:/tmp/config ~/.kube/```
 * ```chmod 600 ~/.kube/config```
 * ```ls -al ~/.kube/config```
+
 Test
 * ```kubectl get pods --all-namespaces```
 
