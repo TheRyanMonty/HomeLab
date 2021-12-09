@@ -48,6 +48,12 @@ Install Longhorn for distributed clustered storage management:
 Expose longhorn ui on port 8001:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/longhorn-expose-frontend.yaml```
 
+Set longhorn as default storage provider
+* ```kubectl patch storageclass longhorn -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+#Ensure they're set
+kubectl get storageclass```
+
 Install Wordpress:
 * Deploy secrets file and run (example file: https://github.com/TheRyanMonty/HomeLab/blob/main/K3S/example-wordpress-secrets.yaml), ex:
 * ```kubectl apply -f wordpress-secrets.yaml```
