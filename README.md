@@ -22,7 +22,7 @@ Install qemu-guest-agent for VMs:
 * ```sudo apt install qemu-guest-agent```
 
 Setup vi as shell browser: 
-* ```echo "set -o vi" >> ~/.bashrc; sudo set -o vi" >> ~/.bashrc```
+* ```echo "set -o vi" >> ~/.bashrc; sudo echo "set -o vi" >> ~/.bashrc```
 
 
 ## Kubernetes:
