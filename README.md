@@ -11,7 +11,7 @@ Port listing/planning:
   - How to deploy NFS for kubernetes (and use for backups?)
   - How to use traefik in k3s?
   - Implement Ansible for server build steps
-  - How to use the longhorn storage?
+  - How to disable control-plane/master server from longhorn automatically?
 
 ## All servers:
 Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgrade packages:
