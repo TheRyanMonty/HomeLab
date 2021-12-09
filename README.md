@@ -4,6 +4,7 @@ Port listing/planning:
 - 8000 = Kubernetes Dashboard
 - 8001 = Longhorn Storage Management Dashboard
 - 8002 = Wordpress / Main Blog Site
+- 8003 = Wordpress Database Access
 
 ## Open Questions
   - How to do backups? (kubernetes cron job?)
