@@ -15,15 +15,8 @@ Port listing/planning:
   - How to use the longhorn storage?
 
 ## All servers:
-Set timezone: 
-* ```sudo timedatectl set-timezone America/Chicago```
-
-Install qemu-guest-agent for VMs: 
-* ```sudo apt install qemu-guest-agent```
-
-Setup vi as shell browser: 
-* ```echo "set -o vi" >> ~/.bashrc; sudo echo "set -o vi" >> ~/.bashrc```
-
+Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgrade packages:
+* ```curl -sfL https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/post_vm_build.sh | sh -```
 
 ## Kubernetes:
 
