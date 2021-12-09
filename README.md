@@ -82,7 +82,8 @@ To decode a secret, you must also use base64:
 How to tell which pod is on which node: 
 * ```kubectl get pod -o=custom-columns=NAME:.metadata.name,STATUS:.status.phase,NODE:.spec.nodeName --all-namespaces```
 
-
+How to uninstall k3s:
+* ```/usr/local/bin/k3s-uninstall.sh```
 
 ## Homelab1: Load balancer
 Install nginx:
