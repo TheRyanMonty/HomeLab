@@ -48,7 +48,7 @@ Set longhorn as default storage provider
 Ensure longhorn is default storage provider
 * ```kubectl get storageclass```
 
-Set default replicas to two if only two workload servers are used (otherwise all volumes will be in a degraded state) and disable the master/control plane server from scheduling via the web ui.
+Set default replicas to two if only two workload servers are used (otherwise all volumes will be in a degraded state) and disable the master/control plane server from scheduling via the web ui. Also ensure to set the NFS backup target (ensure homelab3 steps are complete first for the example to function) - ex: nfs://192.168.86.47:/var/nfs/backups/
 
 Set taint for server so workloads are scheduled on agents and not on this master server:
 * ```kubectl taint nodes pm-k3s-s1 key1=value1:NoSchedule```
