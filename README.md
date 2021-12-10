@@ -136,3 +136,7 @@ Get and install cert:
 Bad usb hub udev rule (Hardware issue on this box):
 * ```echo "ACTION==\"add\", SUBSYSTEMS==\"usb\", RUN+=\"/bin/sh -c 'echo 0 > /sys/bus/usb/devices/usb7/authorized_default'\"" > /etc/udev/rules.d/01-usb_disable_bad_device.rules```
 
+Install NFS:
+* ```sudo apt install nfs-kernel-server```
+
+
