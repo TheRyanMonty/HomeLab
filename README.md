@@ -147,3 +147,6 @@ Create exports file and refresh the export:
 
 View the NFS permissions to ensure it looks good:
 * ```sudo exportfs -v```
+
+Set NFS to start on boot and restart for changes to take effect:
+* ```systemctl restart nfs-server; systemctl enable nfs-server```
