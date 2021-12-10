@@ -143,7 +143,7 @@ Create backups directory and set permissions:
 * ```sudo mkdir -p /var/nfs/backups; sudo chown nobody:nogroup /var/nfs/backups```
 
 Create exports file and refresh the export:
-* ```echo "/var/nfs/backups *(sync,rw)">>/etc/exports; exportfs -r```
+* ```sudo echo "/var/nfs/backups *(sync,rw)">>/etc/exports; sudo exportfs -r```
 
 View the NFS permissions to ensure it looks good:
-* ```exportfs -v```
+* ```sudo exportfs -v```
