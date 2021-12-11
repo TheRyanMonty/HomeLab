@@ -148,3 +148,7 @@ View the NFS permissions to ensure it looks good:
 
 Set NFS to start on boot and restart nfs service for changes to take effect:
 * ```systemctl restart nfs-server; systemctl enable nfs-server```
+
+Install a mysql client to connect and facilitate backups:
+* ```sudo apt install mysql-client-core-8.0```
+
