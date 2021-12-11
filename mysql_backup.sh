@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################################
 ##
-##      sftp_client.sh
+##      mysql_backup.sh
 ##
 ################################################################################
 #Usage:
@@ -39,37 +39,27 @@ ImportConfig() {
 if [ $# = 0 ]
 	then
 		printf "Please specify -c and the path to the config file. \n"
+        exit 1
 	else
 		for argument in $*; do
 			case $argument in
 				'-c')  
 					config_path=`echo $* | sed -e 's/.*-c //' | sed -e 's/ -.*//g'` ;;
 				\?) printf "\nERROR:  \"$argument\" is not a valid argument.\n"
+                    exit 1
 			esac
 		done
 fi
 
 unset argument
 
-#Attempt to pull the sftp config file, leave the rest for other functions, must get logging up and running first and foremost
-#Determine if custom config path is set, if not set a default path and import, if it
-if [[ -z ${config_path} ]]; then
-	config_path=/opt/sftp_client/sftp_client.conf
-	if [[ -r ${config_path} ]]; then
-		#Import configuration file, default is /opt/sftp_client/sftp_client.conf unless otherwise specified
-		source ${config_path}
-	else
-		printf "/opt/sftp_client_sftp_client.conf does not exist or is not readable, exiting...\n"
-		exit 1
-	fi
+#Attempt to read the config file
+if [[ -r ${config_path} ]]; then
+	#Import configuration file
+	source ${config_path}
 else
-	if [[ -r ${config_path} ]]; then
-		#Import configuration file, default is /opt/sftp_client/sftp_client.conf unless otherwise specified
-		source ${config_path}
-	else
-		printf "${config_path} does not exist or is not readable, exiting...\n"
-		exit 1
-	fi
+	printf "${config_path} does not exist or is not readable, exiting...\n"
+	exit 1
 fi
 }
 
@@ -132,8 +122,9 @@ hr() {
 ### Main execution area
 ###########################################################
 ImportGlobalFunctions
-delete_old_backups
+ImportConfig
+DeleteOldBackups
 hr
-backup_databases
+BackupDatabases
 hr
 printf "All backed up!\n\n"
