@@ -13,23 +13,27 @@
 #RESTORE FROM BACKUP
 #  zcat [backupfile.sql.gz] | mysql -u [uname] -p[pass] [dbname]
 
-#==============================================================================
-# CUSTOM SETTINGS
-#==============================================================================
+################################################################################
+## Config SETTINGS
+################################################################################
 
 # Directory to store the backup files
-BACKUP_DIR=/var/nfs/backups/mysql_backups/
+BACKUP_DIR=/var/nfs/backups/mysql_backups/wordpress_db/
 
 # MYSQL Parameters
 MYSQL_UNAME=root
-MYSQL_PWORD=
+MYSQL_PWORD=qOskT1&%lOo0
+
+#Server hosting the database(s)
+MYSQL_SERVER=192.168.86.55
+MYSQL_PORT=8003
 
 # Don't backup databases with these names 
 # Example: starts with mysql (^mysql) or ends with _schema (_schema$)
 IGNORE_DB="(^mysql|_schema$)"
 
 # include mysql and mysqldump binaries for cron bash user
-PATH=$PATH:/usr/local/mysql/bin
+PATH=$PATH:/usr/bin/mysql
 
 # Number of days to keep backups
 KEEP_BACKUPS_FOR=30 #days
@@ -37,11 +41,9 @@ KEEP_BACKUPS_FOR=30 #days
 # YYYY-MM-DD
 TIMESTAMP=$(date +%F)
 
-#==============================================================================
-# METHODS
-#==============================================================================
-
-
+################################################################################
+## Functions
+################################################################################
 
 function delete_old_backups()
 {
@@ -93,9 +95,9 @@ function hr(){
   printf "\n"
 }
 
-#==============================================================================
-# RUN SCRIPT
-#==============================================================================
+###########################################################
+### Main execution area
+###########################################################
 delete_old_backups
 hr
 backup_databases
