@@ -17,7 +17,7 @@
 ## Functions
 ################################################################################
 
-ImportGlobalFunctions () {
+ImportGlobalFunctions() {
 ############################################################################
 ### ImportGlobalFunctions - Purpose is to import needed functions
 ############################################################################
@@ -28,6 +28,49 @@ script_dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 for func_file in ${script_dir}/funcs/*.func; do
 	source ${func_file}
 done
+}
+
+ImportConfig() {
+############################################################################
+### ImportConfig - Purpose is to import the config file for script use
+############################################################################
+
+#Check if arguments are passed in, if not prompt the user
+if [ $# = 0 ]
+	then
+		printf "Please specify -c and the path to the config file. \n"
+	else
+		for argument in $*; do
+			case $argument in
+				'-c')  
+					config_path=`echo $* | sed -e 's/.*-c //' | sed -e 's/ -.*//g'` ;;
+				\?) printf "\nERROR:  \"$argument\" is not a valid argument.\n"
+			esac
+		done
+fi
+
+unset argument
+
+#Attempt to pull the sftp config file, leave the rest for other functions, must get logging up and running first and foremost
+#Determine if custom config path is set, if not set a default path and import, if it
+if [[ -z ${config_path} ]]; then
+	config_path=/opt/sftp_client/sftp_client.conf
+	if [[ -r ${config_path} ]]; then
+		#Import configuration file, default is /opt/sftp_client/sftp_client.conf unless otherwise specified
+		source ${config_path}
+	else
+		printf "/opt/sftp_client_sftp_client.conf does not exist or is not readable, exiting...\n"
+		exit 1
+	fi
+else
+	if [[ -r ${config_path} ]]; then
+		#Import configuration file, default is /opt/sftp_client/sftp_client.conf unless otherwise specified
+		source ${config_path}
+	else
+		printf "${config_path} does not exist or is not readable, exiting...\n"
+		exit 1
+	fi
+fi
 }
 
 DeleteOldBackups () {
