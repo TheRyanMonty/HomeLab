@@ -23,13 +23,11 @@ ImportGlobalFunctions () {
 ############################################################################
 #Define script execution directory for Importing Global Functions
 script_dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
-DebugLogging "Script directory is ${script_dir}"
 
 #Importing functions
 for func_file in ${script_dir}/funcs/*.func; do
 	source ${func_file}
 done
-
 }
 
 DeleteOldBackups () {
@@ -59,26 +57,30 @@ EchoStatus() {
   printf "$1"'\r'
 }
 
-function backup_database(){
+BackupDatabase() {
     backup_file="$BACKUP_DIR/$TIMESTAMP.$database.sql.gz" 
     output+="$database => $backup_file\n"
     echo_status "...backing up $count of $total databases: $database"
     $(mysqldump $(mysql_login) $database | gzip -9 > $backup_file)
+    CaptureExitCode
+    VerifyExitCode
 }
 
-function backup_databases(){
+BackupDatabases() {
   local databases=$(database_list)
   local total=$(echo $databases | wc -w | xargs)
   local output=""
   local count=1
   for database in $databases; do
     backup_database
+    CaptureExitCode
+    VerifyExitCode
     local count=$((count+1))
   done
   echo -ne $output | column -t
 }
 
-function hr(){
+hr() {
   printf '=%.0s' {1..100}
   printf "\n"
 }
@@ -87,8 +89,6 @@ function hr(){
 ### Main execution area
 ###########################################################
 ImportGlobalFunctions
-
-
 delete_old_backups
 hr
 backup_databases
