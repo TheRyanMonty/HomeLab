@@ -30,9 +30,9 @@ for func_file in ${script_dir}/funcs/*.func; do
 done
 }
 
-ImportConfig() {
+SetConfig() {
 ############################################################################
-### ImportConfig - Purpose is to import the config file for script use
+### SetConfig - Purpose is to set the config file from user argument
 ############################################################################
 
 #Check if arguments are passed in, if not prompt the user
@@ -44,7 +44,7 @@ if [ $# = 0 ]
 		for argument in $*; do
 			case $argument in
 				'-c')  
-					config_path=`echo $* | sed -e 's/.*-c //' | sed -e 's/ -.*//g'` ;;
+                    config_path=`echo $* | sed -e 's/.*-c //' | sed -e 's/ -.*//g'` ;;
 				\?) printf "\nERROR:  \"$argument\" is not a valid argument.\n"
                     exit 1
 			esac
@@ -53,6 +53,9 @@ fi
 
 unset argument
 
+}
+
+SourceConfig() {
 #Attempt to read the config file
 if [[ -r ${config_path} ]]; then
 	#Import configuration file
@@ -61,51 +64,66 @@ else
 	printf "${config_path} does not exist or is not readable, exiting...\n"
 	exit 1
 fi
+
+}
+
+ValidateConfig() {
+#Validate configuration file, ensure path exists and is readables
+if [ ! -r ${BACKUP_DIR} ]; then
+    echo "Path ${BACKUP_DIR} is not readable! Exiting..."
+    exit 1
+fi 
 }
 
 DeleteOldBackups () {
-  echo "Deleting $BACKUP_DIR/*.sql.gz older than $KEEP_BACKUPS_FOR days"
-  find $BACKUP_DIR -type f -name "*.sql.gz" -mtime +$KEEP_BACKUPS_FOR -exec rm {} \;
-  CaptureExitCode
-  VerifyExitCode
+echo "Deleting $BACKUP_DIR/*.sql.gz older than $KEEP_BACKUPS_FOR days"
+find $BACKUP_DIR -type f -name "*.sql.gz" -mtime +$KEEP_BACKUPS_FOR -exec rm {} \;
+CaptureExitCode
+VerifyExitCode
 }
 
 MysqlLogin() {
-  local mysql_login="-u $MYSQL_UNAME" 
-  if [ -n "$MYSQL_PWORD" ]; then
-    local mysql_login+=" -p$MYSQL_PWORD" 
-  fi
-  echo $mysql_login
+if [ -n "$MYSQL_SERVER" ]; then
+    local mysql_login+=" -h$MYSQL_SERVER " 
+fi
+if [ -n "$MYSQL_PORT" ]; then
+    local mysql_login+=" -P$MYSQL_PORT " 
+fi
+local mysql_login+="-u $MYSQL_UNAME " 
+if [ -n "$MYSQL_PWORD" ]; then
+    local mysql_login+=" -p$MYSQL_PWORD " 
+fi
+echo $mysql_login
 }
 
 DatabaseList() {
-  local show_databases_sql="SHOW DATABASES WHERE \`Database\` NOT REGEXP '$IGNORE_DB'"
-  echo $(mysql $(mysql_login) -e "$show_databases_sql"|awk -F " " '{if (NR!=1) print $1}')
+local show_databases_sql="SHOW DATABASES WHERE \`Database\` NOT REGEXP '$IGNORE_DB'"
+echo $(mysql $(MysqlLogin) -e "$show_databases_sql"|awk -F " " '{if (NR!=1) print $1}')
 }
 
 EchoStatus() {
-  printf '\r'; 
-  printf ' %0.s' {0..100} 
-  printf '\r'; 
-  printf "$1"'\r'
+printf '\r'; 
+printf ' %0.s' {0..100} 
+printf '\r'; 
+printf "$1"'\r'
 }
 
 BackupDatabase() {
-    backup_file="$BACKUP_DIR/$TIMESTAMP.$database.sql.gz" 
-    output+="$database => $backup_file\n"
-    echo_status "...backing up $count of $total databases: $database"
-    $(mysqldump $(mysql_login) $database | gzip -9 > $backup_file)
-    CaptureExitCode
-    VerifyExitCode
+backup_file="$BACKUP_DIR/$TIMESTAMP.$database.sql.gz" 
+output+="$database => $backup_file\n"
+EchoStatus "...backing up $count of $total databases: $database"
+$(mysqldump $(MysqlLogin) $database | gzip -9 > $backup_file)
+CaptureExitCode
+VerifyExitCode
 }
 
 BackupDatabases() {
-  local databases=$(database_list)
+  local databases=$(DatabaseList)
   local total=$(echo $databases | wc -w | xargs)
   local output=""
   local count=1
   for database in $databases; do
-    backup_database
+    BackupDatabase
     CaptureExitCode
     VerifyExitCode
     local count=$((count+1))
@@ -122,7 +140,9 @@ hr() {
 ### Main execution area
 ###########################################################
 ImportGlobalFunctions
-ImportConfig
+SetConfig $*
+SourceConfig
+ValidateConfig
 DeleteOldBackups
 hr
 BackupDatabases
