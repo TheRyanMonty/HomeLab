@@ -78,7 +78,7 @@ Install Wordpress:
 * ```kubectl config set-context --current --namespace=wordpress```
 * Deploy the non-secret info:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/wordpress-prod.yaml```
-
+* Setup backups via wordpress plugin "UpdraftPlus - Backup/Restore" - associate it with google drive (for now) - it's free.
 
 
 ## K3S Cheat Cheat:
