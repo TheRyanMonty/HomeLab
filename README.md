@@ -92,7 +92,7 @@ To execute a command on a pod:
 * ```kubectl exec --stdin --tty <pod_name> -- /bin/bash```
 
 To list services (all):
-* ```kubectl get svcs -A```
+* ```kubectl get svc -A```
 
 To scale a deployment:
 * ```kubectl scale deployment/<deployment_name> --replicas=10```
