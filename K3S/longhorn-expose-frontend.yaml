@@ -10,6 +10,6 @@ spec:
     app: longhorn-ui
   type: LoadBalancer
   ports:
-    - port: 8001
+    - port: 80
       targetPort: 8000
 ---
