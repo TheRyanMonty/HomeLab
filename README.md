@@ -21,6 +21,11 @@ Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgra
 Install K3S: 
 * ```curl -sfL https://get.k3s.io | sh -s server --disable traefik --disable servicelb```
 
+Install MetalLB:
+* ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.4/config/manifests/metallb-native.yaml```
+
+
+
 Get node token for use on agents:
 * ```cat /var/lib/rancher/k3s/server/node-token```
 
