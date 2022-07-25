@@ -19,7 +19,7 @@ Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgra
 
 ## pm-k3s-s1:
 Install K3S: 
-* ```curl -sfL https://get.k3s.io | sh -```
+* ```curl -sfL https://get.k3s.io | sh - --disable traefik --disable servicelb```
 
 Get node token for use on agents:
 * ```cat /var/lib/rancher/k3s/server/node-token```
