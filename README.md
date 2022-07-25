@@ -1,10 +1,6 @@
 # HomeLab Setup
 
-Port listing/planning:
-- 8000 = Kubernetes Dashboard
-- 8001 = Longhorn Storage Management Dashboard
-- 8002 = Wordpress / Main Blog Site
-- 8003 = Wordpress Database Access
+Accessible service IPs will be assigned via MetalLB.
 
 ## Open Questions
   - How to do backups? (kubernetes cron job?)
@@ -33,7 +29,7 @@ Get node token for use on agents:
 Install Kubernetes Dashboard:
 * ```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml```
 
-Run the assist pieces to make it accessible on port 8000:
+Run the assist pieces to make it accessible on the network:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/kubernetes-dashboard-assist.yaml```
 
 Get the token for kubernetes dashboard:
@@ -42,7 +38,7 @@ Get the token for kubernetes dashboard:
 Install Longhorn for distributed clustered storage management:
 * ```kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.2.2/deploy/longhorn.yaml```
 
-Expose longhorn ui on port 8001:
+Expose longhorn ui on port 80:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/longhorn-expose-frontend.yaml```
 
 Set longhorn as default storage provider
