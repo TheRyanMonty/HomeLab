@@ -20,22 +20,6 @@ spec:
   clusterIP: None
 ---
 apiVersion: v1
-kind: Service
-metadata:
-  name: wordpress-mysql-external
-  namespace: wordpress
-  labels:
-    app: wordpress
-spec:
-  ports:
-    - port: 8003
-      targetPort: 3306
-  type: LoadBalancer
-  selector:
-    app: wordpress
-    tier: mysql
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
@@ -114,7 +98,7 @@ spec:
     tier: frontend
   type: LoadBalancer
   ports:
-    - port: 8002
+    - port: 80
       targetPort: 80
 ---
 apiVersion: v1
