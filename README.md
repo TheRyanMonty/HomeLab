@@ -109,6 +109,9 @@ How to tell which pod is on which node:
 How to uninstall k3s:
 * ```/usr/local/bin/k3s-uninstall.sh```
 
+How to expose a service for loadbalancer testing:
+* ```kubectl expose deployment wordpress -n wordpress --type=LoadBalancer --name=wordpress-mysqlext --port=8003```
+
 ## Homelab1: Load balancer
 Install nginx:
 * ```sudo apt install nginx```
