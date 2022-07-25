@@ -24,7 +24,8 @@ Install K3S:
 Install MetalLB:
 * ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.4/config/manifests/metallb-native.yaml```
 
-
+Apply IP range for home network:
+* ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/metallb-config.yaml```
 
 Get node token for use on agents:
 * ```cat /var/lib/rancher/k3s/server/node-token```
