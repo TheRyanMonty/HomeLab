@@ -2,13 +2,13 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: wordpress
+  name: wordpress-test
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: wordpress-mysql
-  namespace: wordpress
+  namespace: wordpress-test
   labels:
     app: wordpress
 spec:
@@ -22,11 +22,12 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
-  namespace: wordpress
+  name: mysql-pv-claim-test
+  namespace: wordpress-test
   labels:
     app: wordpress
 spec:
+  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:
@@ -37,7 +38,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wordpress-mysql
-  namespace: wordpress
+  namespace: wordpress-test
   labels:
     app: wordpress
 spec:
@@ -78,18 +79,18 @@ spec:
         - containerPort: 3306
           name: mysql
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: mysql-persistent-storage-test
           mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: mysql-persistent-storage-test
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: mysql-pv-claim-test
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: wordpress-external
-  namespace: wordpress
+  namespace: wordpress-test
   labels:
     app: wordpress
 spec:
@@ -97,21 +98,43 @@ spec:
     app: wordpress
     tier: frontend
   type: LoadBalancer
-  loadBalancerIP: 192.168.86.200
+  loadBalancerIP: 192.168.86.203
   ports:
     - port: 80
       targetPort: 80
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: PersistentVolume
 metadata:
-  name: wp-pv-claim
-  namespace: wordpress
+  name: wp-pv-test
+  namespace: wordpress-test
   labels:
     app: wordpress
 spec:
+  storageClassName: nfs
+  nfs:
+    server: 192.168.86.47
+    path: "/nfs/wordpressdata"
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
+  capacity:
+    storage: 20Gi
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+    - timeo=600
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wp-pv-claim-test
+  namespace: wordpress-test
+  labels:
+    app: wordpress
+spec:
+  storageClassName: nfs
+  accessModes:
+    - ReadWriteMany
   resources:
     requests:
       storage: 20Gi
@@ -120,7 +143,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wordpress
-  namespace: wordpress
+  namespace: wordpress-test
   labels:
     app: wordpress
 spec:
@@ -155,10 +178,10 @@ spec:
         - containerPort: 80
           name: wordpress
         volumeMounts:
-        - name: wordpress-persistent-storage
+        - name: wordpress-persistent-storage-test
           mountPath: /var/www/html
       volumes:
-      - name: wordpress-persistent-storage
+      - name: wordpress-persistent-storage-test
         persistentVolumeClaim:
-          claimName: wp-pv-claim
+          claimName: wp-pv-claim-test
 ---
