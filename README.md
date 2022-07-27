@@ -163,7 +163,7 @@ Install a mysql client to connect and facilitate backups:
 
 
 # WORK_IN_PROGRESS
-# Replace homelab1 with inherent ingress functionality within kubernetes
+# Replace homelab1 with inherent ingress functionality with an nginx controller within kubernetes
 Install nginx ingress controller
 * ``` kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml ```
 
