@@ -1,6 +1,6 @@
 # HomeLab Setup
 
-Accessible service IPs will be assigned via MetalLB.
+Accessible service IPs will be assigned via MetalLB and yamls (i.e. using 192.168.200-210).
 
 ## Open Questions
   - How to do backups? (kubernetes cron job?)
