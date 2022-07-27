@@ -106,7 +106,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: wp-pv-test
+  name: wp-pv-nfs-test
   namespace: wordpress-test
   labels:
     app: wordpress
@@ -114,7 +114,7 @@ spec:
   storageClassName: nfs
   nfs:
     server: 192.168.86.76
-    path: "/volume1/wordpressdata"
+    path: "/volume1/wordpressdatatest"
   accessModes:
     - ReadWriteMany
   capacity:
@@ -127,7 +127,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: wp-pv-claim-test
+  name: wp-pv-nfs-claim-test
   namespace: wordpress-test
   labels:
     app: wordpress
@@ -147,6 +147,7 @@ metadata:
   labels:
     app: wordpress
 spec:
+  replicas: 4
   selector:
     matchLabels:
       app: wordpress
@@ -183,5 +184,5 @@ spec:
       volumes:
       - name: wordpress-persistent-storage-test
         persistentVolumeClaim:
-          claimName: wp-pv-claim-test
+          claimName: wp-pv-nfs-claim-test
 ---
