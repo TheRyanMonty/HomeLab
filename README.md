@@ -160,3 +160,11 @@ Set NFS to start on boot and restart nfs service for changes to take effect:
 Install a mysql client to connect and facilitate backups:
 * ```sudo apt install mysql-client-core-8.0```
 
+
+
+# WORK_IN_PROGRESS
+# Replace homelab1 with inherent ingress functionality within kubernetes
+Install nginx ingress controller
+* ``` kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml ```
+
+Determine how to apply lets encrypt in conjunction with ingress requests: https://runnable.com/blog/how-to-use-lets-encrypt-on-kubernetes
