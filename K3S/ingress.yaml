@@ -2,11 +2,15 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-wordpress
-  namespace: wordpress-test
+  namespace: wordpress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/issuer: "letsencrypt-prod"
 spec:
   ingressClassName: nginx
   rules:
-  - host: "test.local"
+  - host: "montysplace.org"
     http:
       paths:
       - pathType: Prefix
@@ -16,4 +20,19 @@ spec:
             name: wordpress-external
             port:
               number: 80
+  - host: "www.montysplace.org"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: wordpress-external
+            port:
+              number: 80
+  tls:
+    - hosts:
+      - montysplace.org
+      - www.montysplace.org
+      secretName: wordpress-certificate
 ---
