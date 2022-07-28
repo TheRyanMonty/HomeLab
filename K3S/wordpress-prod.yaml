@@ -112,7 +112,7 @@ metadata:
 spec:
   storageClassName: nfs
   nfs:
-    server: 192.168.86.76
+    server: 192.168.1.187
     path: "/volume1/wordpressdata"
   accessModes:
     - ReadWriteMany
