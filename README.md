@@ -117,11 +117,6 @@ Install nginx:
 Critical file(s) to backups:
   /etc/nginx/conf.d/*
 
-Install ddclient:
-* ```sudo apt install ddclient```
-Critical file(s) to backups:
-  /etc/ddclient.conf
-
 Install Certbot: https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx
 Ensure snapd is up to date: 
 * ```sudo snap install core; sudo snap refresh core```
