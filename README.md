@@ -178,4 +178,7 @@ Create wordpress certificate:
 Apply the ingress and include certificate information:
 * ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/ingress.yaml ```
 
+Port forward on router to the appropriate nginx ingress metallb cluster ip on port 80 and 443 - can be obtained by getting external-ip from the following command:
+* ``` kubectl get svc -n ingress-nginx ```
+
 Determine how to apply lets encrypt in conjunction with ingress requests: https://runnable.com/blog/how-to-use-lets-encrypt-on-kubernetes
