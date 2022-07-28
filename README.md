@@ -162,8 +162,8 @@ Install a mysql client to connect and facilitate backups:
 ###Install nginx ingress controller
 * ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/ingress-nginx.yaml ```
 
-### Install cert-manager:
-
+### TLS Certificate authority work
+Install cert-manager:
 * ``` kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml ```
 
 Verify install:
@@ -173,8 +173,9 @@ Create lets encrypt issuer reference:
 * ``` kubectl apply -f letsencrypt.yaml ```
 
 Create wordpress certificate:
-* ``` kubectly apply -f certificate.yaml ```
+* ``` kubectl apply -f certificate.yaml ```
 
 Apply the ingress and include certificate information:
+* ``` kubectl apply -f ingress.yaml ```
 
 Determine how to apply lets encrypt in conjunction with ingress requests: https://runnable.com/blog/how-to-use-lets-encrypt-on-kubernetes
