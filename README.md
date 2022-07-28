@@ -170,12 +170,12 @@ Verify install:
 * ``` kubectl get pods --namespace cert-manager ```
 
 Create lets encrypt issuer reference:
-* ``` kubectl apply -f letsencrypt.yaml ```
+* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/letsencrypt.yaml ```
 
 Create wordpress certificate:
-* ``` kubectl apply -f certificate.yaml ```
+* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/certificate.yaml ```
 
 Apply the ingress and include certificate information:
-* ``` kubectl apply -f ingress.yaml ```
+* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/ingress.yaml ```
 
 Determine how to apply lets encrypt in conjunction with ingress requests: https://runnable.com/blog/how-to-use-lets-encrypt-on-kubernetes
