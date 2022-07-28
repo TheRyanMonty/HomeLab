@@ -6,11 +6,11 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "test"
+  - host: "test.local"
     http:
       paths:
       - pathType: Prefix
-        path: /*
+        path: /
         backend:
           service:
             name: wordpress-external
