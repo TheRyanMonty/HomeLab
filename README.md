@@ -48,7 +48,7 @@ Set longhorn as default storage provider
 Ensure longhorn is default storage provider
 * ```kubectl get storageclass```
 
-Set default replicas to two if only two workload servers are used (otherwise all volumes will be in a degraded state) and disable the master/control plane server from scheduling via the web ui. Also ensure to set the NFS backup target (ensure homelab3 steps are complete first for the example to function) - ex: nfs://192.168.86.47:/var/nfs/backups/
+Set default replicas to two if only two workload servers are used (otherwise all volumes will be in a degraded state) and disable the master/control plane server from scheduling via the web ui. Also ensure to set the NFS backup target (ensure homelab3 steps are complete first for the example to function) - ex: nfs://192.168.1.187:/var/nfs/backups/
 
 Set taint for server so workloads are scheduled on agents and not on this master server:
 * ```kubectl taint nodes pm-k3s-s1 key1=value1:NoSchedule```
@@ -80,8 +80,29 @@ Install Wordpress:
 * ```kubectl config set-context --current --namespace=wordpress```
 * Deploy the non-secret info:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/wordpress-prod.yaml```
-* Setup backups via wordpress plugin "UpdraftPlus - Backup/Restore" - associate it with google drive (for now) - it's free.
+* Remember to be sure to setup backups via wordpress plugin "UpdraftPlus - Backup/Restore" - associate it with google drive (for now) - it's free.
 
+### Install nginx ingress controller
+* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/ingress-nginx.yaml ```
+
+### TLS Certificate authority work
+Install cert-manager:
+* ``` kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml ```
+
+Verify install:
+* ``` kubectl get pods --namespace cert-manager ```
+
+Create lets encrypt issuer reference:
+* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/letsencrypt.yaml ```
+
+Create wordpress certificate:
+* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/certificate.yaml ```
+
+Apply the ingress and include certificate information:
+* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/ingress.yaml ```
+
+Port forward on router to the appropriate nginx ingress metallb cluster ip on port 80 and 443 - can be obtained by getting external-ip from the following command:
+* ``` kubectl get svc -n ingress-nginx ```
 
 ## K3S Cheat Cheat:
 To execute a command on a pod:
@@ -111,74 +132,4 @@ How to uninstall k3s:
 How to expose a service for loadbalancer testing:
 * ```kubectl expose deployment wordpress -n wordpress --type=LoadBalancer --name=wordpress-mysqlext --port=8003```
 
-## Homelab1: Load balancer
-Install nginx:
-* ```sudo apt install nginx```
-Critical file(s) to backups:
-  /etc/nginx/conf.d/*
 
-Install Certbot: https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx
-Ensure snapd is up to date: 
-* ```sudo snap install core; sudo snap refresh core```
-
-Install certbot: 
-* ```sudo snap install --classic certbot```
-
-Create logical link: 
-* ```sudo ln -s /snap/bin/certbot /usr/bin/certbot```
-
-Get and install cert: 
-* ```sudo certbot --nginx```
-
-
-## Homelab2 - Test Dev Box
-
-## Homelab3 - Backup server (?)
-Bad usb hub udev rule (Hardware issue on this box):
-* ```echo "ACTION==\"add\", SUBSYSTEMS==\"usb\", RUN+=\"/bin/sh -c 'echo 0 > /sys/bus/usb/devices/usb7/authorized_default'\"" > /etc/udev/rules.d/01-usb_disable_bad_device.rules```
-
-Install NFS:
-* ```sudo apt install nfs-kernel-server```
-
-Create backups directory and set permissions:
-* ```sudo mkdir -p /var/nfs/backups; sudo chown nobody:nogroup /var/nfs/backups```
-
-Create exports file and refresh the export:
-* ```sudo sh -c 'echo "/var/nfs/backups *(sync,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash)">>/etc/exports'; sudo exportfs -r```
-
-View the NFS permissions to ensure it looks good:
-* ```sudo exportfs -v```
-
-Set NFS to start on boot and restart nfs service for changes to take effect:
-* ```systemctl restart nfs-server; systemctl enable nfs-server```
-
-Install a mysql client to connect and facilitate backups:
-* ```sudo apt install mysql-client-core-8.0```
-
-
-
-# WORK_IN_PROGRESS
-### Replace homelab1 with inherent ingress functionality with an nginx controller within kubernetes
-### Install nginx ingress controller
-* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/ingress-nginx.yaml ```
-
-### TLS Certificate authority work
-Install cert-manager:
-* ``` kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml ```
-
-Verify install:
-* ``` kubectl get pods --namespace cert-manager ```
-
-Create lets encrypt issuer reference:
-* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/letsencrypt.yaml ```
-
-Create wordpress certificate:
-* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/certificate.yaml ```
-
-Apply the ingress and include certificate information:
-* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/ingress.yaml ```
-
-Port forward on router to the appropriate nginx ingress metallb cluster ip on port 80 and 443 - can be obtained by getting external-ip from the following command:
-* ``` kubectl get svc -n ingress-nginx ```
-
-Determine how to apply lets encrypt in conjunction with ingress requests: https://runnable.com/blog/how-to-use-lets-encrypt-on-kubernetes
