@@ -165,6 +165,6 @@ Install a mysql client to connect and facilitate backups:
 # WORK_IN_PROGRESS
 # Replace homelab1 with inherent ingress functionality with an nginx controller within kubernetes
 Install nginx ingress controller
-* ``` kubectl apply -f kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/baremetal/deploy.yaml ```
+* ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/ingress-nginx.yaml ```
 
 Determine how to apply lets encrypt in conjunction with ingress requests: https://runnable.com/blog/how-to-use-lets-encrypt-on-kubernetes
