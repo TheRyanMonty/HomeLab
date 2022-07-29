@@ -1,11 +1,17 @@
 # HomeLab Setup
 
-Accessible service IPs will be assigned via MetalLB and yamls (i.e. using 192.168.1.200-210).
+## Introduction
 
-## Open Questions
-  - How to do backups? (kubernetes cron job?)
-  - How to deploy NFS for kubernetes (and use for backups?)
-  - How to disable control-plane/master server for volume replicas from longhorn automatically?
+The purpose of this repo is, selfishly, to document the setup and configuration I have outside of my network as a reference point in the future. Unselfishly I hope putting this in a public space will help others who are attempting to do a similar setup (high level defined below) be able to do so in a way that's easier than my learning epxerience and to have as a reference point of a working configuration.
+
+Here are the goals of this configuration:
+1. To host a personal website/blog site via Kubernetes (I specifically chose k3s) and expose the website to the internet moderately securely
+2. To have the flexibliity to setup multiple different sites/services with a single domain by using the kubernetes ingress
+3. To leverage letsencrypt to rollout and keep up to date a valid TLS certificate for the exposed sites and services
+4. Decent web interface/gui to view and manage kubernetes
+5. Ability to scale pods up or down across nodes
+
+Accessible service IPs will be assigned via MetalLB and yamls (i.e. using 192.168.1.200-210). Network router dhcp reservation space must be updated to accomodate the range used or IP conflicts will occur.
 
 ## All servers:
 Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgrade packages:
@@ -53,7 +59,7 @@ Set default replicas to two if only two workload servers are used (otherwise all
 Set taint for server so workloads are scheduled on agents and not on this master server:
 * ```kubectl taint nodes pm-k3s-s1 key1=value1:NoSchedule```
 
-## pm-k3s-wl1:
+## pm-k3s-wl1 (repeat for any other worker nodes):
 
 Insert the output from node token cat command above on the command below for K3S_TOKEN variable and run on pm-k3s2:
 * ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.86.35:6443 K3S_TOKEN=<insert_from_above> sh -```
@@ -73,7 +79,8 @@ On workload server pm-k3s-wl1
 Test
 * ```kubectl get pods --all-namespaces```
 
-Install Wordpress:
+## Install Wordpress to Kubernetes:
+
 * Deploy secrets file and run (example file: https://github.com/TheRyanMonty/HomeLab/blob/main/K3S/example-wordpress-secrets.yaml), ex:
 * ```kubectl apply -f wordpress-secrets.yaml```
 * Set context for the wordpress namespace:
@@ -82,10 +89,10 @@ Install Wordpress:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/wordpress-prod.yaml```
 * Remember to be sure to setup backups via wordpress plugin "UpdraftPlus - Backup/Restore" - associate it with google drive (for now) - it's free.
 
-### Install nginx ingress controller
+## Install nginx ingress controller
 * ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/ingress-nginx.yaml ```
 
-### TLS Certificate authority work
+## TLS Certificate authority with Lets Encrypt via Kubernetes
 Install cert-manager:
 * ``` kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml ```
 
@@ -104,7 +111,7 @@ Apply the ingress and include certificate information:
 Port forward on router to the appropriate nginx ingress metallb cluster ip on port 80 and 443 - can be obtained by getting external-ip from the following command:
 * ``` kubectl get svc -n ingress-nginx ```
 
-## K3S Cheat Cheat:
+## Kubernetes / K3S Cheat Cheat:
 To execute a command on a pod:
 * ```kubectl exec --stdin --tty <pod_name> -- /bin/bash```
 
