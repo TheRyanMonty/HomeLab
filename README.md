@@ -4,7 +4,7 @@
 
 The purpose of this repo is, selfishly, to document the setup and configuration I have outside of my network as a reference point in the future. Unselfishly I hope putting this in a public space will help others who are attempting to do a similar setup (high level defined below) be able to do so in a way that's easier than my learning epxerience and to have as a reference point of a working configuration.
 
-Here are the goals of this configuration:
+Goals of the configuration:
 1. To host a personal website/blog site via Kubernetes (I specifically chose k3s) and expose the website to the internet moderately securely
 2. To have the flexibliity to setup multiple different sites/services with a single domain by using the kubernetes ingress
 3. To leverage letsencrypt to rollout and keep up to date a valid TLS certificate for the exposed sites and services
@@ -16,8 +16,9 @@ What's doing the work:
 - Load Balancer = Since this is not a cloud configuration, using [metallb](https://metallb.universe.tf/) makes the most sense
 - NFS = Needed to scale website app servers across worker nodes
 - [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) = [nginx](https://github.com/kubernetes/ingress-nginx) - Serves as reverse proxy for kubernetes services and can serve content based on domain name used
+- TLS Website certificates = Both [cert-manager](https://github.com/cert-manager/cert-manager) and [lets encrypt](https://letsencrypt.org/how-it-works/)
 
-Accessible service IPs will be assigned via MetalLB and yamls (i.e. using 192.168.1.200-210). Network router dhcp reservation space must be updated to accomodate the range used or IP conflicts will occur.
+Network accessible service IPs will be assigned via MetalLB and yamls (i.e. using 192.168.1.200-210). Network router dhcp reservation space must be updated to accomodate the range used or IP conflicts will occur.
 
 ## All servers:
 Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgrade packages:
@@ -117,7 +118,7 @@ Apply the ingress and include certificate information:
 Port forward on router to the appropriate nginx ingress metallb cluster ip on port 80 and 443 - can be obtained by getting external-ip from the following command:
 * ``` kubectl get svc -n ingress-nginx ```
 
-## Kubernetes / K3S Cheat Cheat:
+# Kubernetes / K3S Cheat Cheat:
 To execute a command on a pod:
 * ```kubectl exec --stdin --tty <pod_name> -- /bin/bash```
 
