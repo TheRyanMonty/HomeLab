@@ -11,6 +11,12 @@ Here are the goals of this configuration:
 4. Decent web interface/gui to view and manage kubernetes
 5. Ability to scale pods up or down across nodes
 
+What's doing the work:
+- Kubernetes = [K3S](https://k3s.io/)
+- Load Balancer = Since this is not a cloud configuration, using [metallb](https://metallb.universe.tf/) makes the most sense
+- NFS = Needed to scale website app servers across worker nodes
+- [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) = [nginx](https://github.com/kubernetes/ingress-nginx) - Serves as reverse proxy for kubernetes services and can serve content based on domain name used
+
 Accessible service IPs will be assigned via MetalLB and yamls (i.e. using 192.168.1.200-210). Network router dhcp reservation space must be updated to accomodate the range used or IP conflicts will occur.
 
 ## All servers:
