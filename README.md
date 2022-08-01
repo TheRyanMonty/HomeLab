@@ -20,6 +20,8 @@ The purpose of this repo is, selfishly, to document the setup and configuration 
 
 Network accessible service IPs will be assigned via MetalLB and yamls (i.e. using 192.168.1.200-210). Network router dhcp reservation space must be updated to accomodate the range used or IP conflicts will occur.
 
+#### Note: While I will be leaving the manual instructions up, I have begun converting these manual steps into ansible driven 'playbooks' [here](https://github.com/TheRyanMonty/ServerManagement) on my server management github page.
+
 ## All servers:
 Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgrade packages:
 * ```curl -sfL https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/post_vm_build.sh | sh -```
