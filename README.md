@@ -26,7 +26,7 @@ Network accessible service IPs will be assigned via MetalLB and yamls (i.e. usin
 Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgrade packages:
 * ```curl -sfL https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/post_vm_build.sh | sh -```
 
-#### Note: Ansible playbook is [here](https://github.com/TheRyanMonty/ServerManagement/blob/main/Ansible%20Playbooks/build_server_post_creation.yaml)
+#### Note: Ansible playbook for post VM standup is [here](https://github.com/TheRyanMonty/ServerManagement/blob/main/Ansible%20Playbooks/build_server_post_creation.yaml)
 
 ## pm-k3s-s1:
 Install K3S: 
