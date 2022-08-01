@@ -71,7 +71,7 @@ Set taint for server so workloads are scheduled on agents and not on this master
 ## pm-k3s-wl1 (repeat for any other worker nodes):
 
 Insert the output from node token cat command above on the command below for K3S_TOKEN variable and run on pm-k3s2:
-* ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.86.35:6443 K3S_TOKEN=<insert_from_above> sh -```
+* ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.1.120:6443 K3S_TOKEN=<insert_from_above> sh -```
 
 Setup the ability to run kubectl from this workload server:
 
