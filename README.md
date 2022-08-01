@@ -44,7 +44,7 @@ Get node token for use on agents:
 Install Kubernetes Dashboard:
 * ```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml```
 
-Run the assist pieces to make it accessible on the network:
+Allow the dashboard web UI to be accessible on the network:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/kubernetes-dashboard-assist.yaml```
 
 Get the token for kubernetes dashboard:
