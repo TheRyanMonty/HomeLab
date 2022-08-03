@@ -20,9 +20,13 @@ The purpose of this repo is, selfishly, to document the setup and configuration 
 
 Network accessible service IPs will be assigned via MetalLB and yamls (i.e. using 192.168.1.200-210). Network router dhcp reservation space must be updated to accomodate the range used or IP conflicts will occur.
 
+#### Note: While I will be leaving the manual instructions up, I have begun converting these manual steps into ansible driven 'playbooks' [here](https://github.com/TheRyanMonty/ServerManagement) on my server management github page.
+
 ## All servers:
 Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgrade packages:
 * ```curl -sfL https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/post_vm_build.sh | sh -```
+
+#### Note: Ansible playbook for post VM standup is [here](https://github.com/TheRyanMonty/ServerManagement/blob/main/Ansible%20Playbooks/build_server_post_creation.yaml)
 
 ## pm-k3s-s1:
 Install K3S: 
@@ -40,7 +44,7 @@ Get node token for use on agents:
 Install Kubernetes Dashboard:
 * ```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml```
 
-Run the assist pieces to make it accessible on the network:
+Allow the dashboard web UI to be accessible on the network:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/kubernetes-dashboard-assist.yaml```
 
 Get the token for kubernetes dashboard:
@@ -67,7 +71,7 @@ Set taint for server so workloads are scheduled on agents and not on this master
 ## pm-k3s-wl1 (repeat for any other worker nodes):
 
 Insert the output from node token cat command above on the command below for K3S_TOKEN variable and run on pm-k3s2:
-* ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.86.35:6443 K3S_TOKEN=<insert_from_above> sh -```
+* ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.1.120:6443 K3S_TOKEN=<insert_from_above> sh -```
 
 Setup the ability to run kubectl from this workload server:
 
