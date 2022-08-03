@@ -1,21 +1,5 @@
 --- 
 apiVersion: cert-manager.io/v1
-kind: Issuer
-metadata: 
-  name: letsencrypt-prod
-  namespace: wordpress
-spec: 
-  acme: 
-    email: "ryan.g.montgomery@gmail.com"
-    privateKeySecretRef: 
-      name: letsencrypt-wordpress-prod
-    server: "https://acme-v02.api.letsencrypt.org/directory"
-    solvers:
-    - http01:
-        ingress:
-          class: nginx
----
-apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: wordpress-certificate
