@@ -14,6 +14,22 @@ spec:
   selector:
     k8s-app: kubernetes-dashboard
 ---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: kubernetes-dashboard-expose-insecure
+  namespace: kubernetes-dashboard
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.1.201
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    k8s-app: kubernetes-dashboard
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
