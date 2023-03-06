@@ -148,4 +148,10 @@ How to uninstall k3s:
 How to expose a service for loadbalancer testing:
 * ```kubectl expose deployment wordpress -n wordpress --type=LoadBalancer --name=wordpress-mysqlext --port=8003```
 
+How to look at all namespaces:
+* ```kubectl get namespaces```
+
+How to look at and follow pod logs:
+* ```kubectl logs -f <pod_name>```
+
 
