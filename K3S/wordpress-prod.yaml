@@ -127,6 +127,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: wp-pv-claim
+  namespace: wordpress
   labels:
     app: wordpress
 spec:
