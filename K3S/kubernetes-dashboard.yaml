@@ -132,7 +132,7 @@ rules:
     resources: ["pods", "nodes"]
     verbs: ["get", "list", "watch"]
   - apiGroups: ["", "extensions", "apps"]
-    resources: ["deployments", "pods", "services", "secrets", "namespaces"]
+    resources: ["*"]
     verbs: ["*"]
 
 ---
