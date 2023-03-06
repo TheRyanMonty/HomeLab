@@ -102,27 +102,42 @@ spec:
     - port: 80
       targetPort: 80
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: wp-pv-nfs
-  namespace: wordpress
-  labels:
-    app: wordpress
-spec:
-  storageClassName: nfs
-  nfs:
-    server: 192.168.1.187
-    path: "/volume1/wordpressdata"
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 20Gi
-  mountOptions:
-    - hard
-    - nfsvers=4.1
-    - timeo=600
----
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: wp-pv-nfs
+#  namespace: wordpress
+#  labels:
+#    app: wordpress
+#spec:
+#  storageClassName: nfs
+#  nfs:
+#    server: 192.168.1.187
+#    path: "/volume1/wordpressdata"
+#  accessModes:
+#    - ReadWriteMany
+#  capacity:
+#    storage: 20Gi
+#  mountOptions:
+#    - hard
+#    - nfsvers=4.1
+#    - timeo=600
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: wp-pv-claim-nfs
+#  namespace: wordpress
+#  labels:
+#    app: wordpress
+#spec:
+#  storageClassName: nfs
+#  accessModes:
+#    - ReadWriteMany
+#  resources:
+#    requests:
+#      storage: 20Gi
+#---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -137,21 +152,6 @@ spec:
     requests:
       storage: 20Gi
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: wp-pv-claim-nfs
-  namespace: wordpress
-  labels:
-    app: wordpress
-spec:
-  storageClassName: nfs
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 20Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -160,7 +160,7 @@ metadata:
   labels:
     app: wordpress
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: wordpress
@@ -192,14 +192,14 @@ spec:
         - containerPort: 80
           name: wordpress
         volumeMounts:
-        - name: wordpress-persistent-nfs
-          mountPath: /var/www/html
+       # - name: wordpress-persistent-nfs
+       #   mountPath: /var/www/html2
         - name: wordpress-persistent-claim
-          mountPath: /var/www/html2
+          mountPath: /var/www/html
       volumes:
-      - name: wordpress-persistent-nfs
-        persistentVolumeClaim:
-          claimName: wp-pv-claim-nfs
+      #- name: wordpress-persistent-nfs
+      #  persistentVolumeClaim:
+      #    claimName: wp-pv-claim-nfs
       - name: wordpress-persistent-claim
         persistentVolumeClaim:
           claimName: wp-pv-claim
