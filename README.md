@@ -154,4 +154,6 @@ How to look at all namespaces:
 How to look at and follow pod logs:
 * ```kubectl logs -f <pod_name>```
 
+Enable a user to manage the k3s cluster:
+* ``` mkdir ~/.kube && sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config && sudo chown $USER ~/.kube/config && chmod 600 ~/.kube/config && export KUBECONFIG=~/.kube/config && echo "export KUBECONFIG=~/.kube/config">>~/.bashrc ```
 
