@@ -42,7 +42,7 @@ Get node token for use on agents:
 * ```cat /var/lib/rancher/k3s/server/node-token```
 
 Install Kubernetes Dashboard:
-* ```kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml```
+* ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/kubernetes-dashboard.yaml```
 
 Allow the dashboard web UI to be accessible on the network:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/kubernetes-dashboard-assist.yaml```
