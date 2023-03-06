@@ -131,6 +131,9 @@ rules:
   - apiGroups: ["metrics.k8s.io"]
     resources: ["pods", "nodes"]
     verbs: ["get", "list", "watch"]
+  - apiGroups: ["", "extensions", "apps"]
+    resources: ["deployments", "pods", "services", "secrets", "namespaces"]
+    verbs: ["*"]
 
 ---
 
