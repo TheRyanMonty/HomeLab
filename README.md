@@ -32,6 +32,10 @@ Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgra
 Install K3S: 
 * ```curl -sfL https://get.k3s.io | sh -s server --disable traefik --disable servicelb```
 
+Shutdown K3S on Shutdown (otherwise reboots can take up to 20 minutes):
+* ```sudo ln -s /usr/local/bin/k3s-killall.sh /etc/rc0.d/K01k3s-stop```
+* ```sudo ln -s /usr/local/bin/k3s-killall.sh /etc/rc6.d/K01k3s-stop```
+
 Install MetalLB:
 * ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.4/config/manifests/metallb-native.yaml```
 
@@ -72,6 +76,10 @@ Set taint for server so workloads are scheduled on agents and not on this master
 
 Insert the output from node token cat command above on the command below for K3S_TOKEN variable and run on pm-k3s2:
 * ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.1.120:6443 K3S_TOKEN=<insert_from_above> sh -```
+
+Shutdown K3S on Shutdown (otherwise reboots can take up to 20 minutes):
+* ```sudo ln -s /usr/local/bin/k3s-killall.sh /etc/rc0.d/K01k3s-stop```
+* ```sudo ln -s /usr/local/bin/k3s-killall.sh /etc/rc6.d/K01k3s-stop```
 
 Setup the ability to run kubectl from this workload server:
 
