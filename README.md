@@ -22,6 +22,17 @@ Network accessible service IPs will be assigned via MetalLB and yamls (i.e. usin
 
 #### Note: While I will be leaving the manual instructions up, I have begun converting these manual steps into ansible driven 'playbooks' [here](https://github.com/TheRyanMonty/ServerManagement) on my server management github page.
 
+
+#Versions Installed
+* [KS3] (https://github.com/k3s-io/k3s/releases) = v1.25.6
+* [Kubernetes-Dashboard] (https://github.com/kubernetes/dashboard/releases) = v2.7.0
+* [Metallb] (https://metallb.universe.tf/release-notes/) = v0.13.9
+* [Longhorn] (https://github.com/longhorn/longhorn/releases) = v1.4.0
+* [Wordpress] (https://hub.docker.com/_/wordpress) = 6.1.1-apache
+* [Mysql (Wordpress)] (https://hub.docker.com/_/mysql) = 8.0.32
+* [ingress-nginx] (https://github.com/kubernetes/ingress-nginx) = 1.6.4
+* [cert-manager] (https://cert-manager.io/docs/installation/supported-releases/) = v1.11.0
+
 ## All servers:
 Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgrade packages:
 * ```curl -sfL https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/post_vm_build.sh | sh -```
@@ -37,7 +48,7 @@ Shutdown K3S on Shutdown (otherwise reboots can take up to 20 minutes):
 * ```sudo ln -s /usr/local/bin/k3s-killall.sh /etc/rc6.d/K01k3s-stop```
 
 Install MetalLB:
-* ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.4/config/manifests/metallb-native.yaml```
+* ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-native.yaml```
 
 Apply IP range for home network:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/metallb-config.yaml```
@@ -111,7 +122,7 @@ Test
 
 ## TLS Certificate authority with Lets Encrypt via Kubernetes
 Install cert-manager:
-* ``` kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml ```
+* ``` kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml ```
 
 Verify install:
 * ``` kubectl get pods --namespace cert-manager ```
