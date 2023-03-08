@@ -18,7 +18,7 @@ The purpose of this repo is, selfishly, to document the setup and configuration 
 - [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) = [nginx](https://github.com/kubernetes/ingress-nginx) - Serves as reverse proxy for kubernetes services and can serve content based on domain name used
 - TLS Website certificates = Both [cert-manager](https://github.com/cert-manager/cert-manager) and [lets encrypt](https://letsencrypt.org/how-it-works/)
 
-Network accessible service IPs will be assigned via MetalLB and yamls (i.e. using 192.168.1.200-210). Network router dhcp reservation space must be updated to accomodate the range used or IP conflicts will occur.
+Network accessible service IPs will be assigned via MetalLB and yamls (i.e. using 10.50.1.200-210). Network router dhcp reservation space must be updated to accomodate the range used or IP conflicts will occur.
 
 #### Note: While I will be leaving the manual instructions up, I have begun converting these manual steps into ansible driven 'playbooks' [here](https://github.com/TheRyanMonty/ServerManagement) on my server management github page.
 
@@ -40,45 +40,6 @@ Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgra
 #### Note: Ansible playbook for post VM standup is [here](https://github.com/TheRyanMonty/ServerManagement/blob/main/Ansible%20Playbooks/build_server_post_creation.yaml)
 
 ## pm-k3s-s1:
-### Install NFS
-* ```sudo apt update```
-* ```sudo apt install nfs-kernel-server```
-
-Setup the new disk for NFS use
-Create the partition and filesystem to your preference
-Create the mount directory and mount the new drive
-* ```mkdir -p /var/k3s/nfs1```
-Mount the drive
-* ```mount -t auto /dev/sdb1 /var/k3s/nfs1```
- Get uuid for editing fstab
-* ```lsblk -o NAME,FSTYPE,UUID```
-Edit fstab and add line to have partition mounted on boot
-* ```vi /etc/fstab```
-Reboot to ensure everything comes back clean
-
-Mount nfs volume from s1 to wl1 and wl2
-Edit permissions of the mount point for nfs:
-* ```chown -R nobody:nogroup /var/k3s```
-Edit /etc/exports
-* ```vi /etc/exports```
-Add this line:
-* ```/var/k3s/nfs1		*(rw,sync,no_root_squash,no_subtree_check)```
-Restart nfs
-* ```systemctl restart nfs-kernel-server```
-
-### On client machines, create the mountpoint
-* ```mkdir -p /var/k3s/nfs1```
-Mount the drive
-* ```mount pm-k3s-s1:/var/k3s/nfs1 /var/k3s/nfs1```
-Edit /etc/fstab to have them mounted on boot
-* ```pm-k3s-s1:/var/k3s/nfs1	/var/k3s/nfs1 nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0```
-
-4. investigate kubernetes yaml update needs
-5. mount to unused mount ponit
-6. migrate data
-7. update git and remove longhorn (and references to it)
-
-
 Install K3S: 
 * ```curl -sfL https://get.k3s.io | sh -s server --disable traefik --disable servicelb```
 
@@ -117,7 +78,7 @@ Set longhorn as default storage provider
 Ensure longhorn is default storage provider
 * ```kubectl get storageclass```
 
-Set default replicas to two if only two workload servers are used (otherwise all volumes will be in a degraded state) and disable the master/control plane server from scheduling via the web ui. Also ensure to set the NFS backup target (ensure homelab3 steps are complete first for the example to function) - ex: nfs://192.168.1.187:/var/nfs/backups/
+Set default replicas to two if only two workload servers are used (otherwise all volumes will be in a degraded state) and disable the master/control plane server from scheduling via the web ui.
 
 Set taint for server so workloads are scheduled on agents and not on this master server:
 * ```kubectl taint nodes pm-k3s-s1 key1=value1:NoSchedule```
@@ -125,7 +86,7 @@ Set taint for server so workloads are scheduled on agents and not on this master
 ## pm-k3s-wl1 (repeat for any other worker nodes):
 
 Insert the output from node token cat command above on the command below for K3S_TOKEN variable and run on pm-k3s2:
-* ```curl -sfL https://get.k3s.io | K3S_URL=https://192.168.1.120:6443 K3S_TOKEN=<insert_from_above> sh -```
+* ```curl -sfL https://get.k3s.io | K3S_URL=https://10.50.1.53:6443 K3S_TOKEN=<insert_from_above> sh -```
 
 Shutdown K3S on Shutdown (otherwise reboots can take up to 20 minutes):
 * ```sudo ln -s /usr/local/bin/k3s-killall.sh /etc/rc0.d/K01k3s-stop```
