@@ -23,7 +23,7 @@ Network accessible service IPs will be assigned via MetalLB and yamls (i.e. usin
 #### Note: While I will be leaving the manual instructions up, I have begun converting these manual steps into ansible driven 'playbooks' [here](https://github.com/TheRyanMonty/ServerManagement) on my server management github page.
 
 
-#Versions Installed
+### Versions Installed
 * [KS3](https://github.com/k3s-io/k3s/releases) = v1.25.6
 * [Kubernetes-Dashboard](https://github.com/kubernetes/dashboard/releases) = v2.7.0
 * [Metallb](https://metallb.universe.tf/release-notes/) = v0.13.9
