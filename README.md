@@ -41,36 +41,36 @@ Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgra
 
 ## pm-k3s-s1:
 ### Install NFS
-sudo apt update
-sudo apt install nfs-kernel-server
+* ```sudo apt update```
+* ```sudo apt install nfs-kernel-server```
 
-### Setup the new Disk for NFS use
+Setup the new disk for NFS use
 Create the partition and filesystem to your preference
 Create the mount directory and mount the new drive
 * ```mkdir -p /var/k3s/nfs1```
-### Mount the drive
+Mount the drive
 * ```mount -t auto /dev/sdb1 /var/k3s/nfs1```
-### Get uuid for editing fstab
+ Get uuid for editing fstab
 * ```lsblk -o NAME,FSTYPE,UUID```
-### Edit fstab and add line to have partition mounted on boot
+Edit fstab and add line to have partition mounted on boot
 * ```vi /etc/fstab```
-### Reboot to ensure everything comes back clean
+Reboot to ensure everything comes back clean
 
-### Mount nfs volume from s1 to wl1 and wl2
-### Edit permissions of the mount point for nfs:
+Mount nfs volume from s1 to wl1 and wl2
+Edit permissions of the mount point for nfs:
 * ```chown -R nobody:nogroup /var/k3s```
-### Edit /etc/exports
+Edit /etc/exports
 * ```vi /etc/exports```
-### Add this line:
+Add this line:
 * ```/var/k3s/nfs1		*(rw,sync,no_root_squash,no_subtree_check)```
-### Restart nfs
+Restart nfs
 * ```systemctl restart nfs-kernel-server```
 
 ### On client machines, create the mountpoint
 * ```mkdir -p /var/k3s/nfs1```
-### Mount the drive
+Mount the drive
 * ```mount pm-k3s-s1:/var/k3s/nfs1 /var/k3s/nfs1```
-### Edit /etc/fstab to have them mounted on boot
+Edit /etc/fstab to have them mounted on boot
 * ```pm-k3s-s1:/var/k3s/nfs1	/var/k3s/nfs1 nfs auto,nofail,noatime,nolock,intr,tcp,actimeo=1800 0 0```
 
 4. investigate kubernetes yaml update needs
