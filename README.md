@@ -31,7 +31,7 @@ Network accessible service IPs will be assigned via MetalLB and yamls (i.e. usin
 * [Wordpress](https://hub.docker.com/_/wordpress) = 6.1.1-apache
 * [Mysql (Wordpress)](https://hub.docker.com/_/mysql) = 8.0.32
 * [ingress-nginx](https://github.com/kubernetes/ingress-nginx) = 1.6.4
-* [cert-manager](https://cert-manager.io/docs/installation/supported-releases/) = v1.11.0
+* [cert-manager](https://cert-manager.io/docs/installation/supported-releases/) = v1.13.0
 
 ## All servers:
 Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgrade packages:
