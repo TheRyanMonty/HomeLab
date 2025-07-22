@@ -26,7 +26,7 @@ Network accessible service IPs will be assigned via MetalLB and yamls (i.e. usin
 ### Versions Installed
 * [KS3](https://github.com/k3s-io/k3s/releases) = v1.32.6
 * [Kubernetes-Dashboard](https://github.com/kubernetes/dashboard/releases) = v2.7.0
-* [Metallb](https://metallb.universe.tf/release-notes/) = v0.13.9
+* [Metallb](https://metallb.universe.tf/release-notes/) = v0.15.2
 * [Longhorn](https://github.com/longhorn/longhorn/releases) = v1.8.2
 * [Wordpress](https://hub.docker.com/_/wordpress) = 6.8.2-php8.4-apache
 * [Mysql (Wordpress)](https://hub.docker.com/_/mysql) = 9.3.0
