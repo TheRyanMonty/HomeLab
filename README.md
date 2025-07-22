@@ -27,11 +27,11 @@ Network accessible service IPs will be assigned via MetalLB and yamls (i.e. usin
 * [KS3](https://github.com/k3s-io/k3s/releases) = v1.32.6
 * [Kubernetes-Dashboard](https://github.com/kubernetes/dashboard/releases) = v2.7.0
 * [Metallb](https://metallb.universe.tf/release-notes/) = v0.13.9
-* [Longhorn](https://github.com/longhorn/longhorn/releases) = v1.4.0
-* [Wordpress](https://hub.docker.com/_/wordpress) = 6.1.1-apache
+* [Longhorn](https://github.com/longhorn/longhorn/releases) = v1.8.2
+* [Wordpress](https://hub.docker.com/_/wordpress) = 6.8.2-php8.4-apache
 * [Mysql (Wordpress)](https://hub.docker.com/_/mysql) = 9.3.0
 * [ingress-nginx](https://github.com/kubernetes/ingress-nginx) = 1.6.4
-* [cert-manager](https://cert-manager.io/docs/installation/supported-releases/) = v1.13.0
+* [cert-manager](https://cert-manager.io/docs/installation/supported-releases/) = v1.18.0
 
 ## All servers:
 Set timezone, install qemu-guest-agent, set vi as shell browser and update/upgrade packages:
@@ -66,7 +66,7 @@ Get the token for kubernetes dashboard:
 * ```kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"```
 
 Install Longhorn for distributed clustered storage management:
-* ```kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.4.0/deploy/longhorn.yaml```
+* ```kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.8.2/deploy/longhorn.yaml```
 
 Expose longhorn ui on port 80:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/longhorn-expose-frontend.yaml```
@@ -122,7 +122,7 @@ Test
 
 ## TLS Certificate authority with Lets Encrypt via Kubernetes
 Install cert-manager:
-* ``` kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml ```
+* ``` kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.18.0/cert-manager.yaml ```
 
 Verify install:
 * ``` kubectl get pods --namespace cert-manager ```
