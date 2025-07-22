@@ -24,12 +24,12 @@ Network accessible service IPs will be assigned via MetalLB and yamls (i.e. usin
 
 
 ### Versions Installed
-* [KS3](https://github.com/k3s-io/k3s/releases) = v1.25.6
+* [KS3](https://github.com/k3s-io/k3s/releases) = v1.32.6
 * [Kubernetes-Dashboard](https://github.com/kubernetes/dashboard/releases) = v2.7.0
 * [Metallb](https://metallb.universe.tf/release-notes/) = v0.13.9
 * [Longhorn](https://github.com/longhorn/longhorn/releases) = v1.4.0
 * [Wordpress](https://hub.docker.com/_/wordpress) = 6.1.1-apache
-* [Mysql (Wordpress)](https://hub.docker.com/_/mysql) = 8.0.32
+* [Mysql (Wordpress)](https://hub.docker.com/_/mysql) = 9.3.0
 * [ingress-nginx](https://github.com/kubernetes/ingress-nginx) = 1.6.4
 * [cert-manager](https://cert-manager.io/docs/installation/supported-releases/) = v1.13.0
 
