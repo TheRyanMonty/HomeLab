@@ -12,6 +12,6 @@ sudo apt install -y qemu-guest-agent nfs-common
 #Setup vi as shell browser:
 echo "set -o vi" >> ~/.bashrc
 #update and upgrade
-sudo apt update; sudo apt upgrade
+sudo apt update; sudo apt dist-upgrade -y
 
 exit 0
