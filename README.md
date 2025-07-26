@@ -25,7 +25,6 @@ Network accessible service IPs will be assigned via MetalLB and yamls (i.e. usin
 
 ### Versions Installed
 * [KS3](https://github.com/k3s-io/k3s/releases) = v1.32.6
-* [Kubernetes-Dashboard](https://github.com/kubernetes/dashboard/releases) = v2.7.0
 * [Metallb](https://metallb.universe.tf/release-notes/) = v0.15.2
 * [Longhorn](https://github.com/longhorn/longhorn/releases) = v1.8.2
 * [Wordpress](https://hub.docker.com/_/wordpress) = 6.8.2-php8.4-apache
@@ -55,15 +54,6 @@ Apply IP range for home network:
 
 Get node token for use on agents:
 * ```cat /var/lib/rancher/k3s/server/node-token```
-
-Install Kubernetes Dashboard:
-* ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/kubernetes-dashboard.yaml```
-
-Allow the dashboard web UI to be accessible on the network:
-* ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/kubernetes-dashboard-assist.yaml```
-
-Get the token for kubernetes dashboard:
-* ```kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"```
 
 Install Longhorn for distributed clustered storage management:
 * ```kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.8.2/deploy/longhorn.yaml```
