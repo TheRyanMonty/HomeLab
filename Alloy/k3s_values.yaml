@@ -1,0 +1,131 @@
+---
+cluster:
+  name: meta-monitoring-tutorial
+
+nodeLogs:
+  enabled: false
+
+alloy-singleton:
+  enabled: false
+
+alloy-metrics:
+  enabled: false
+
+alloy-logs:
+  enabled: true
+  alloy:
+    mounts:
+      varlog: false
+      dockercontainers: false
+    clustering:
+      enabled: true
+
+alloy-profiles:
+  enabled: false
+
+alloy-receiver:
+  enabled: false
+
+# =======================================================================
+# CRITICAL CHANGE: DIRECTLY PROVIDE THE ALLOY CONFIGURATION
+# IMPORTANT: Relabeling is now handled by a separate loki.relabel component.
+# =======================================================================
+alloy:
+  configMap:
+    content: |
+      logging {
+        level  = "info"
+        format = "logfmt"
+      }
+
+      // Kubernetes discovery for pods, used by loki.source.kubernetes
+      discovery.kubernetes "pods" {
+        role = "pod"
+      }
+
+      // Kubernetes discovery for events, used by loki.source.kubernetes_events
+      discovery.kubernetes "events" {
+        role = "events"
+      }
+
+      // Define your Loki remote write destination
+      loki.write "loki_remote_write" {
+        endpoint {
+          url = "http://10.50.1.15:3100/loki/api/v1/push"
+          // If your Loki requires authentication, add it here, e.g.:
+          // basic_auth {
+          //   username = "your_username"
+          //   password = "your_password"
+          // }
+          // For Grafana Cloud, you might need specific headers like:
+          // headers {
+          //   "X-Scope-OrgID" = "your_org_id"
+          // }
+        }
+      }
+
+      // NEW COMPONENT: loki.relabel to apply relabeling rules
+      loki.relabel "kubernetes_log_relabel" {
+        forward_to = [loki.write.loki_remote_write.receiver] // Forward relabeled logs to Loki write
+
+        // Each 'rule' block defines a relabeling rule
+        rule {
+          target_label = "namespace"
+          source_labels = ["__meta_kubernetes_namespace"]
+          action = "replace" // Default action, explicitly stated for clarity
+        }
+        rule {
+          target_label = "pod"
+          source_labels = ["__meta_kubernetes_pod_name"]
+          action = "replace"
+        }
+        rule {
+          target_label = "container"
+          source_labels = ["__meta_kubernetes_container_name"]
+          action = "replace"
+        }
+        rule {
+          target_label = "node_name"
+          source_labels = ["__meta_kubernetes_node_name"]
+          action = "replace"
+        }
+        // Add other relabeling rules based on your `labelsToKeep` as separate `rule` blocks.
+        // For example, to keep `app_kubernetes_io_name`:
+        // rule {
+        //   action = "replace"
+        //   source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name"]
+        //   target_label = "app_kubernetes_io_name"
+        //   regex = "(.+)"
+        // }
+      }
+
+      // Collect logs from Kubernetes pods
+      loki.source.kubernetes "kubernetes_pod_logs" {
+        targets    = discovery.kubernetes.pods.targets
+        // Forward to the new loki.relabel component
+        forward_to = [loki.relabel.kubernetes_log_relabel.receiver]
+      }
+
+      // If you were using structuredMetadata, you'd configure it here.
+      // Note: structured_metadata is a field within loki.source.kubernetes.
+      // Example:
+      // structured_metadata {
+      //   pod = {
+      //     label = "pod"
+      //     type  = "string"
+      //   }
+      // }
+
+      // Collect Kubernetes cluster events
+      loki.source.kubernetes_events "kubernetes_events_collector" {
+        forward_to = [loki.write.loki_remote_write.receiver]
+        // You might want to add relabeling rules for events here as well,
+        // potentially via another loki.relabel component if complex.
+      }
+
+      // Other discovery components (from your original chart default config)
+      discovery.kubernetes "nodes" { role = "node" }
+      discovery.kubernetes "services" { role = "service" }
+      discovery.kubernetes "endpoints" { role = "endpoints" }
+      discovery.kubernetes "endpointslices" { role = "endpointslice" }
+      discovery.kubernetes "ingresses" { role = "ingress" }
