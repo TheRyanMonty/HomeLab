@@ -14,7 +14,7 @@ echo "set -o vi" >> ~/.bashrc
 sudo echo "set -o vi">>/root/.bashrc
 #Set default editor to vi/vim
 echo "export EDITOR='vim'" >> ~/.bashrc
-sudo "export EDITOR='vim'" >> /root/.bashrc
+sudo echo "export EDITOR='vim'" >> /root/.bashrc
 #update and upgrade
 sudo apt update; sudo apt dist-upgrade -y
 
