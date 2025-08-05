@@ -130,13 +130,13 @@ docker run -d --network=host -v open-webui:/app/backend/data -e OLLAMA_BASE_URL=
 Install speech to text Whisper
 ```
 sudo mkdir /opt/whisperdata
-sudo docker run -itd -p 10300:10300 -v /opt/whisperdata:/data rhasspy/wyoming-whisper --model tiny-int8 --language en
+sudo docker run -itd --restart=unless-stopped -p 10300:10300 -v /opt/whisperdata:/data rhasspy/wyoming-whisper --model tiny-int8 --language en
 ```
 Configure in home assistant - via Wyoming protocal to IP and port 10300
 Install text to speech Piper
 ```
 sudo mkdir /opt/piperdata
-sudo docker run -itd -p 10200:10200 -v /opt/piperdata/:/data rhasspy/wyoming-piper --voice en_US-lessac-medium
+sudo docker run -itd --restart=unless-stopped -p 10200:10200 -v /opt/piperdata/:/data rhasspy/wyoming-piper --voice en_US-lessac-medium
 ```
 Configure in home assistant - via Wyoming protocal to IP and port 10200
 
