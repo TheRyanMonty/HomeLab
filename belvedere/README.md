@@ -68,7 +68,7 @@ Ollama install:
 ```
 curl -fsSL https://ollama.com/install.sh | sh
 ```
-After the install, you have to ensure ollama starts *after* the gpu is recognized, note the 'After' and 'Requires' stanzas in the example below for the service file.
+After the install, you have to ensure ollama starts *after* the gpu is recognized, note the 'After' and 'Requires' stanzas in the example below for the service file. Also you need the other environment variable to integrate with home assistant.
 ```
 monty@belvedere:~$ cat /etc/systemd/system/ollama.service
 [Unit]
@@ -83,6 +83,7 @@ Group=ollama
 Restart=always
 RestartSec=3
 Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+Environment="OLLAMA_HOST=0.0.0.0:11434"
 
 [Install]
 WantedBy=default.target
