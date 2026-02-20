@@ -108,6 +108,7 @@ Test
 * Remember to be sure to setup backups via wordpress plugin "UpdraftPlus - Backup/Restore" - associate it with google drive (for now) - it's free.
 
 ## Install nginx ingress controller
+* ``` kubectl apply -f https://raw.githubusercontent.com/nginxinc/kubernetes-ingress/v3.5.0/deploy/crds.yaml ```
 * ``` kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/ingress-nginx.yaml ```
 
 ## TLS Certificate authority with Lets Encrypt via Kubernetes
