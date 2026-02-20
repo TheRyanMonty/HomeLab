@@ -317,6 +317,16 @@ subjects:
   name: ingress-nginx-admission
   namespace: ingress-nginx
 ---
+# UDP Configuration for WireGuard
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: udp-services
+  namespace: ingress-nginx
+data:
+  "443": "ingress-nginx/omada-wireguard-proxy:51820"
+---
+# ConfigMap for Nginx Controller
 apiVersion: v1
 data:
   allow-snippet-annotations: "true"
@@ -331,6 +341,34 @@ metadata:
   name: ingress-nginx-controller
   namespace: ingress-nginx
 ---
+# Headless Service for Omada Gateway
+apiVersion: v1
+kind: Service
+metadata:
+  name: omada-wireguard-proxy
+  namespace: ingress-nginx
+spec:
+  ports:
+  - name: wireguard
+    protocol: UDP
+    port: 51820
+    targetPort: 51820
+---
+# Endpoints for Omada Gateway
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: omada-wireguard-proxy
+  namespace: ingress-nginx
+subsets:
+  - addresses:
+      - ip: 10.50.1.1
+    ports:
+      - name: wireguard
+        port: 51820
+        protocol: UDP
+---
+# Updated Ingress Controller Service
 apiVersion: v1
 kind: Service
 metadata:
@@ -355,6 +393,10 @@ spec:
     port: 443
     protocol: TCP
     targetPort: https
+  - name: wireguard-udp
+    port: 443
+    protocol: UDP
+    targetPort: 443-udp
   selector:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
@@ -385,6 +427,7 @@ spec:
     app.kubernetes.io/name: ingress-nginx
   type: ClusterIP
 ---
+# Updated Ingress Controller Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -419,6 +462,7 @@ spec:
         - --controller-class=k8s.io/ingress-nginx
         - --ingress-class=nginx
         - --configmap=$(POD_NAMESPACE)/ingress-nginx-controller
+        - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
         - --validating-webhook=:8443
         - --validating-webhook-certificate=/usr/local/certificates/cert
         - --validating-webhook-key=/usr/local/certificates/key
@@ -433,7 +477,7 @@ spec:
               fieldPath: metadata.namespace
         - name: LD_PRELOAD
           value: /usr/local/lib/libmimalloc.so
-        image: registry.k8s.io/ingress-nginx/controller:v1.6.4@sha256:d1707ca76d3b044ab8a28277a2466a02100ee9f58a86af1535a3edf9323ea1b5
+        image: registry.k8s.io/ingress-nginx/controller:v1.6.4
         imagePullPolicy: IfNotPresent
         lifecycle:
           preStop:
@@ -458,6 +502,9 @@ spec:
         - containerPort: 443
           name: https
           protocol: TCP
+        - containerPort: 443
+          name: 443-udp
+          protocol: UDP
         - containerPort: 8443
           name: webhook
           protocol: TCP
@@ -530,7 +577,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+        image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.1.1
         imagePullPolicy: IfNotPresent
         name: create
         securityContext:
@@ -579,7 +626,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.1.1@sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660
+        image: registry.k8s.io/ingress-nginx/kube-webhook-certgen:v1.1.1
         imagePullPolicy: IfNotPresent
         name: patch
         securityContext:
