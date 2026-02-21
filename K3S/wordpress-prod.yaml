@@ -17,7 +17,7 @@ spec:
   selector:
     app: wordpress
     tier: mysql
-  clusterIP: None
+  type: ClusterIP
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -102,42 +102,6 @@ spec:
     - port: 80
       targetPort: 80
 ---
-#apiVersion: v1
-#kind: PersistentVolume
-#metadata:
-#  name: wp-pv-nfs
-#  namespace: wordpress
-#  labels:
-#    app: wordpress
-#spec:
-#  storageClassName: nfs
-#  nfs:
-#    server: 192.168.1.187
-#    path: "/volume1/wordpressdata"
-#  accessModes:
-#    - ReadWriteMany
-#  capacity:
-#    storage: 20Gi
-#  mountOptions:
-#    - hard
-#    - nfsvers=4.1
-#    - timeo=600
-#---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  name: wp-pv-claim-nfs
-#  namespace: wordpress
-#  labels:
-#    app: wordpress
-#spec:
-#  storageClassName: nfs
-#  accessModes:
-#    - ReadWriteMany
-#  resources:
-#    requests:
-#      storage: 20Gi
-#---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
