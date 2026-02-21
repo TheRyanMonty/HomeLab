@@ -34,7 +34,7 @@ spec:
     - protocol: TCP
       port: 80
   egress:
-  - to: # This allows the frontend to talk to the MySQL tier
+  - to:
     - podSelector:
         matchLabels:
           app: wordpress
