@@ -76,11 +76,11 @@ metadata:
   name: nginx-config
   namespace: nginx-ingress
 data:
-  # Built-in HSTS support for NGINX Inc. Controller
+  # Native HSTS support
   hsts: "true"
   hsts-max-age: "63072000"
   hsts-include-subdomains: "true"
-  # Custom snippets for headers not natively in the ConfigMap schema
+  # Security header snippets
   http-snippets: |
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
@@ -161,8 +161,10 @@ spec:
         args:
           - -ingress-class=nginx
           - -enable-custom-resources
-          - -enable-snippets  # REQUIRED for http-snippets to work
-          - -global-configuration=nginx-ingress/nginx-configuration
+          - -enable-snippets
+          # Bridges the Deployment to your ConfigMap
+          - -nginx-configmaps=$(POD_NAMESPACE)/nginx-config
+          - -global-configuration=$(POD_NAMESPACE)/nginx-configuration
           - -enable-leader-election=false
         resources:
           requests:
