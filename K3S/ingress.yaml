@@ -4,8 +4,8 @@ metadata:
   name: ingress-wordpress
   namespace: wordpress
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.org/rewrites: "true"
+    nginx.org/redirect-to-https: "true"
     cert-manager.io/issuer: "letsencrypt-prod"
 spec:
   ingressClassName: nginx
