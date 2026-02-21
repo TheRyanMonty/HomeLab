@@ -11,7 +11,7 @@ spec:
   - Ingress
   - Egress
 ---
-# 2. Allow NGINX Ingress to reach WordPress Frontend
+# 2. Allow NGINX Ingress to reach WordPress Frontend AND Outbound to MySQL & Internet
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -34,7 +34,7 @@ spec:
     - protocol: TCP
       port: 80
   egress:
-  - to:
+  - to: # Rule A: Internal to MySQL
     - podSelector:
         matchLabels:
           app: wordpress
@@ -42,6 +42,14 @@ spec:
     ports:
     - protocol: TCP
       port: 3306
+  - to: # Rule B: External for Updates
+    - ipBlock:
+        cidr: 0.0.0.0/0
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
 ---
 # 3. Allow WordPress to reach MySQL
 apiVersion: networking.k8s.io/v1
