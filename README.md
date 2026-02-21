@@ -47,7 +47,7 @@ Shutdown K3S on Shutdown (otherwise reboots can take up to 20 minutes):
 * ```sudo ln -s /usr/local/bin/k3s-killall.sh /etc/rc6.d/K01k3s-stop```
 
 Install MetalLB:
-* ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-native.yaml```
+* ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.15.2/config/manifests/metallb-native.yaml```
 
 Apply IP range for home network:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/metallb-config.yaml```
