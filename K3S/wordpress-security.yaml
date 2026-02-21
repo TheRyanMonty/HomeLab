@@ -22,6 +22,9 @@ spec:
     matchLabels:
       app: wordpress
       tier: frontend
+  policyTypes:
+  - Ingress
+  - Egress
   ingress:
   - from:
     - namespaceSelector:
@@ -30,6 +33,15 @@ spec:
     ports:
     - protocol: TCP
       port: 80
+  egress:
+  - to: # This allows the frontend to talk to the MySQL tier
+    - podSelector:
+        matchLabels:
+          app: wordpress
+          tier: mysql
+    ports:
+    - protocol: TCP
+      port: 3306
 ---
 # 3. Allow WordPress to reach MySQL
 apiVersion: networking.k8s.io/v1
@@ -54,7 +66,7 @@ spec:
     - protocol: TCP
       port: 3306
 ---
-# 4. Allow Egress for DNS resolution (required for service names to work)
+# 4. Allow Egress for DNS resolution
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
