@@ -115,7 +115,7 @@ Test
 
 ## TLS Certificate authority with Lets Encrypt via Kubernetes
 Install cert-manager:
-* ``` kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.18.0/cert-manager.yaml ```
+* ``` kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.19.3/cert-manager.yaml ```
 
 Verify install:
 * ``` kubectl get pods --namespace cert-manager ```
