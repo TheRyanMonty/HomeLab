@@ -105,6 +105,8 @@ Test
 * ```kubectl config set-context --current --namespace=wordpress```
 * Deploy the non-secret info:
 * ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/main/K3S/wordpress-prod.yaml```
+* Deploy Wordpress Network Security
+* ```kubectl apply -f https://raw.githubusercontent.com/TheRyanMonty/HomeLab/refs/heads/main/K3S/wordpress-security.yaml```
 * Remember to be sure to setup backups via wordpress plugin "UpdraftPlus - Backup/Restore" - associate it with google drive (for now) - it's free.
 
 ## Install nginx ingress controller
