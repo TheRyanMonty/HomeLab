@@ -3,10 +3,8 @@ kind: Namespace
 metadata:
   name: nginx-ingress
   labels:
-    # Essential for your NetworkPolicies to recognize this namespace
     kubernetes.io/metadata.name: nginx-ingress
 ---
-# ResourceQuota to protect the node from exhaustion
 apiVersion: v1
 kind: ResourceQuota
 metadata:
@@ -78,6 +76,16 @@ metadata:
   name: nginx-config
   namespace: nginx-ingress
 data:
+  # Built-in HSTS support for NGINX Inc. Controller
+  hsts: "true"
+  hsts-max-age: "63072000"
+  hsts-include-subdomains: "true"
+  # Custom snippets for headers not natively in the ConfigMap schema
+  http-snippets: |
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 ---
 apiVersion: k8s.nginx.org/v1
 kind: GlobalConfiguration
@@ -153,9 +161,9 @@ spec:
         args:
           - -ingress-class=nginx
           - -enable-custom-resources
+          - -enable-snippets  # REQUIRED for http-snippets to work
           - -global-configuration=nginx-ingress/nginx-configuration
           - -enable-leader-election=false
-        # Enforcing resource limits at the pod level
         resources:
           requests:
             cpu: "200m"
