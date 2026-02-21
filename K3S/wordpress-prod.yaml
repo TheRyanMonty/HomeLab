@@ -156,14 +156,9 @@ spec:
         - containerPort: 80
           name: wordpress
         volumeMounts:
-       # - name: wordpress-persistent-nfs
-       #   mountPath: /var/www/html2
         - name: wordpress-persistent-claim
           mountPath: /var/www/html
       volumes:
-      #- name: wordpress-persistent-nfs
-      #  persistentVolumeClaim:
-      #    claimName: wp-pv-claim-nfs
       - name: wordpress-persistent-claim
         persistentVolumeClaim:
           claimName: wp-pv-claim
