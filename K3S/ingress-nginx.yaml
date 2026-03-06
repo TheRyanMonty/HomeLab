@@ -76,43 +76,33 @@ metadata:
   name: nginx-config
   namespace: nginx-ingress
 data:
-  # PQC Hybrid Key Exchange Configuration
-  ssl-conf-command: "Curves X25519MLKEM768:x25519:secp384r1"
-  ssl-ecdh-curve: "X25519MLKEM768"
-  ssl-ciphers: "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
   ssl-protocols: "TLSv1.3"
-  
-  # Buffer optimizations for large images
+  ssl-ciphers: "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
   proxy-buffer-size: "16k"
   proxy-buffers: "4 64k"
   proxy-busy-buffers-size: "128k"
-
-  # Standard Security Headers
   hsts: "true"
   hsts-max-age: "63072000"
   hsts-include-subdomains: "true"
-  hsts-preload: "true" 
+  hsts-preload: "true"
   server-snippets: |
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.wordpress.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 ---
-apiVersion: discovery.k8s.io/v1
-kind: EndpointSlice
+apiVersion: v1
+kind: Endpoints
 metadata:
-  name: omada-wireguard-proxy-slice
+  name: omada-wireguard-proxy
   namespace: nginx-ingress
-  labels:
-    kubernetes.io/service-name: omada-wireguard-proxy
-addressType: IPv4
-ports:
-  - name: wireguard
-    protocol: UDP
-    port: 51820
-endpoints:
+subsets:
   - addresses:
-      - "10.50.1.1"
+      - ip: 10.50.1.1
+    ports:
+      - port: 51820
+        name: wireguard-port
+        protocol: UDP
 ---
 apiVersion: k8s.nginx.org/v1
 kind: GlobalConfiguration
@@ -136,11 +126,11 @@ spec:
     name: wireguard-udp
     protocol: UDP
   upstreams:
-  - name: omada-gateway
+  - name: omada-wireguard-proxy
     service: omada-wireguard-proxy
     port: 51820
   action:
-    pass: omada-gateway
+    pass: omada-wireguard-proxy
 ---
 apiVersion: v1
 kind: Service
@@ -148,11 +138,12 @@ metadata:
   name: omada-wireguard-proxy
   namespace: nginx-ingress
 spec:
+  # Removing selector for manual Endpoints usage
   ports:
   - port: 51820
     protocol: UDP
     targetPort: 51820
-    name: wireguard
+    name: wireguard-port
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -236,6 +227,6 @@ spec:
     protocol: TCP
     targetPort: 443
   - name: wireguard-udp
-    port: 443 
+    port: 443
     protocol: UDP
     targetPort: 51820
