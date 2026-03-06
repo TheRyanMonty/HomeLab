@@ -12,10 +12,10 @@ metadata:
   namespace: nginx-ingress
 spec:
   hard:
-    requests.cpu: "500m"
-    requests.memory: "512Mi"
-    limits.cpu: "1"
-    limits.memory: "1Gi"
+    requests.cpu: "1"
+    requests.memory: "1Gi"
+    limits.cpu: "2"      # Increased to allow surge during RollingUpdate
+    limits.memory: "2Gi" # Increased to allow surge during RollingUpdate
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -76,13 +76,26 @@ metadata:
   name: nginx-config
   namespace: nginx-ingress
 data:
-  # Built-in HSTS support
+  # --- Post-Quantum Cryptography (PQC) 2026 Standards ---
+  # Enables Hybrid Key Exchange (X25519 + ML-KEM)
+  ssl-conf-command: "Curves X25519MLKEM768:x25519:secp384r1"
+  # Explicitly communicates PQC preference to compatible browsers
+  ssl-ecdh-curve: "X25519MLKEM768"
+  # Hardens symmetric encryption to AES-256
+  ssl-ciphers: "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
+  ssl-protocols: "TLSv1.3"
+
+  # --- WordPress Performance & Buffer Optimizations ---
+  # Resolves "upstream response is buffered to a temporary file" warnings
+  proxy-buffer-size: "16k"
+  proxy-buffers: "4 64k"
+  proxy-busy-buffers-size: "128k"
+
+  # --- Security Headers ---
   hsts: "true"
   hsts-max-age: "63072000"
   hsts-include-subdomains: "true"
   hsts-preload: "true" 
-  # Using server-snippets for more reliable header injection
-  # Optimized for WordPress compatibility
   server-snippets: |
     add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.wordpress.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self';" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
@@ -173,7 +186,7 @@ spec:
             memory: "256Mi"
           limits:
             cpu: "500m"
-            memory: "512Mi"
+            memory: "1Gi"
         env:
         - name: POD_NAME
           valueFrom:
