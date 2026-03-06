@@ -14,8 +14,8 @@ spec:
   hard:
     requests.cpu: "1"
     requests.memory: "1Gi"
-    limits.cpu: "2"      # Increased to allow surge during RollingUpdate
-    limits.memory: "2Gi" # Increased to allow surge during RollingUpdate
+    limits.cpu: "2"
+    limits.memory: "2Gi"
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -76,22 +76,18 @@ metadata:
   name: nginx-config
   namespace: nginx-ingress
 data:
-  # --- Post-Quantum Cryptography (PQC) 2026 Standards ---
-  # Enables Hybrid Key Exchange (X25519 + ML-KEM)
+  # PQC Hybrid Key Exchange Configuration
   ssl-conf-command: "Curves X25519MLKEM768:x25519:secp384r1"
-  # Explicitly communicates PQC preference to compatible browsers
   ssl-ecdh-curve: "X25519MLKEM768"
-  # Hardens symmetric encryption to AES-256
   ssl-ciphers: "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384"
   ssl-protocols: "TLSv1.3"
-
-  # --- WordPress Performance & Buffer Optimizations ---
-  # Resolves "upstream response is buffered to a temporary file" warnings
+  
+  # Buffer optimizations for large images
   proxy-buffer-size: "16k"
   proxy-buffers: "4 64k"
   proxy-busy-buffers-size: "128k"
 
-  # --- Security Headers ---
+  # Standard Security Headers
   hsts: "true"
   hsts-max-age: "63072000"
   hsts-include-subdomains: "true"
@@ -101,6 +97,22 @@ data:
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: omada-wireguard-proxy-slice
+  namespace: nginx-ingress
+  labels:
+    kubernetes.io/service-name: omada-wireguard-proxy
+addressType: IPv4
+ports:
+  - name: wireguard
+    protocol: UDP
+    port: 51820
+endpoints:
+  - addresses:
+      - "10.50.1.1"
 ---
 apiVersion: k8s.nginx.org/v1
 kind: GlobalConfiguration
@@ -141,18 +153,6 @@ spec:
     protocol: UDP
     targetPort: 51820
     name: wireguard
----
-apiVersion: v1
-kind: Endpoints
-metadata:
-  name: omada-wireguard-proxy
-  namespace: nginx-ingress
-subsets:
-  - addresses:
-      - ip: 10.50.1.1
-    ports:
-      - port: 51820
-        protocol: UDP
 ---
 apiVersion: apps/v1
 kind: Deployment
