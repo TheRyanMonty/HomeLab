@@ -17,7 +17,7 @@ apt update && apt install -y qemu-guest-agent nfs-common
 
 # Configure Shell (Both Local and Root)
 # Using $SUDO_USER ensures we find your home dir even if running as root
-TARGET_FILES=("/root/.bashrc")
+TARGET_FILES="/root/.bashrc"
 [ -n "$SUDO_USER" ] && TARGET_FILES+=("/home/$SUDO_USER/.bashrc")
 
 for RC in "${TARGET_FILES[@]}"; do
