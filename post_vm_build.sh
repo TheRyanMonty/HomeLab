@@ -6,7 +6,7 @@
 ################################################################################
 
 # Elevate privs
-if [ "$EUID" -ne 0 ]; then 
+if [ $EUID -ne 0 ]; then 
   echo "Execution failed: Please run with 'sudo ./post_vm_build.sh'"
   exit 1
 fi
