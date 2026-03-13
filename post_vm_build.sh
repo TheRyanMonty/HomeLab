@@ -23,7 +23,7 @@ TARGET_FILES=("/root/.bashrc")
 for RC in "${TARGET_FILES[@]}"; do
     echo "set -o vi" >> "$RC"
     echo "export EDITOR='vim'" >> "$RC"
-    echo "sagdu='sudo apt update; sudo apt dist-upgrade -y'" >> "$RC"
+    echo "alias sagdu='sudo apt update; sudo apt dist-upgrade -y'" >> "$RC"
 done
 
 # Update and upgrade
