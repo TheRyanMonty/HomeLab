@@ -5,21 +5,33 @@
 ##
 ################################################################################
 
-#Set timezone:
-sudo timedatectl set-timezone America/Chicago
-#Install qemu-guest-agent for VMs:
-sudo apt install -y qemu-guest-agent nfs-common
-#Setup vi as shell browser:
-echo "set -o vi" >> ~/.bashrc
-sudo echo "set -o vi">>/root/.bashrc
-#Set default editor to vi/vim
-echo "export EDITOR='vim'" >> ~/.bashrc
-sudo echo "export EDITOR='vim'" >> /root/.bashrc
-#update and upgrade
-sudo apt update; sudo apt dist-upgrade -y
+# Elevate privs
+if [ "$EUID" -ne 0 ]; then 
+  echo "Execution failed: Please run with 'sudo ./post_vm_build.sh'"
+  exit 1
+fi
 
-##Added for K3S nodes, but shouldn't hurt any other VM
-echo "###################################################################
+# Timezone & Packages
+timedatectl set-timezone America/Chicago
+apt update && apt install -y qemu-guest-agent nfs-common
+
+# Configure Shell (Both Local and Root)
+# Using $SUDO_USER ensures we find your home dir even if running as root
+TARGET_FILES=("/root/.bashrc")
+[ -n "$SUDO_USER" ] && TARGET_FILES+=("/home/$SUDO_USER/.bashrc")
+
+for RC in "${TARGET_FILES[@]}"; do
+    echo "set -o vi" >> "$RC"
+    echo "export EDITOR='vim'" >> "$RC"
+    echo "sagdu='sudo apt update; sudo apt dist-upgrade -y'" >> "$RC"
+done
+
+# Update and upgrade
+apt dist-upgrade -y
+
+# K3S / Longhorn Overrides
+cat <<EOF >> /etc/sysctl.conf
+###################################################################
 # Kubernetes & Longhorn specific overrides
 # Fixes: failed to create fsnotify watcher: too many open files
 ###################################################################
@@ -33,6 +45,11 @@ fs.inotify.max_user_instances=1024
 fs.inotify.max_user_watches=1048576
 
 # Ensure IP forwarding is enabled for K3s networking (Flannel/Calico)
-net.ipv4.ip_forward=1">>/etc/sysctl.conf
+net.ipv4.ip_forward=1
+EOF
+
+# 6. Apply sysctl changes immediately
+sysctl -p
 
 exit 0
+
